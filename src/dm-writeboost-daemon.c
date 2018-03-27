@@ -23,6 +23,39 @@
 
 #include <linux/rbtree.h>
 
+
+/*----------------------------------------------------------------------------*/
+/*
+ * (jjo) 하나의 세그먼트 내부 metablock의  sector 정보를 확인하여 
+ * 순차적인 * io 패턴일 경우 1을 반환 랜덤 io일 경우에는 0을 반환하게 됨.
+ */
+
+int check_io_pattern(struct dm_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
+{
+	u8 i = 0;
+	u64 prev_sector = 0;
+	int sequential_count = 0;
+	struct metablock *mb;
+	prev_sector = mb->sector;
+	printk("check_io_pattern() length: %llu\n",seg->length);
+	for(i = 1; i < seg->length; i++) {
+		mb = seg->mb_array + i;
+		if(prev_sector == mb->sector - 8)
+			sequential_count++;
+		else
+			sequential_count--;
+		printk("sequential_count: %d, sector: %llu \n",sequential_count, mb->sector);
+		prev_sector = mb->sector;
+	}
+
+	//printk("check_io_pattern(): seq_count: %u\n",sequential_count);
+
+	//if(0 > sequential_count)
+	if(100 > sequential_count)
+		return 0;
+	return sequential_count;
+}
+
 /*----------------------------------------------------------------------------*/
 
 void queue_barrier_io(struct wb_device *wb, struct bio *bio)
@@ -103,21 +136,39 @@ static void do_flush_proc(struct wb_device *wb)
 	rambuf = get_rambuffer_by_id(wb, id);
 	seg = rambuf->seg;
 
-	io_req = (struct dm_io_request) {
-		WB_IO_WRITE,
-		.client = wb->io_client,
-		.notify.fn = NULL,
-		.mem.type = DM_IO_VMA,
-		.mem.ptr.addr = rambuf->data,
-	};
-	region = (struct dm_io_region) {
-		.bdev = wb->cache_dev->bdev,
-		.sector = seg->start_sector,
-		.count = (seg->length + 1) << 3,
-	};
+	//(jjo) sequentail io check
+	
+	if(check_io_pattern(wb, rambuf, seg) && (true == wb->adaptive_write_mode)) { // sequential io
+		struct metablock *mb; 
+		io_req = (struct dm_io_request) {
+			WB_IO_WRITE,
+			.client = wb->io_client,
+			.notify.fn = NULL,
+			.mem.type = DM_IO_VMA,
+			.mem.ptr.addr = rambuf->data,
+		};
+		region = (struct dm_io_region) {
+			.bdev = wb->backing_dev->bdev,
+			.sector = seg->start_sector,
+			.count = (seg->length + 1) << 3,
+		};
+	} else {	// random io
+		io_req = (struct dm_io_request) {
+			WB_IO_WRITE,
+			.client = wb->io_client,
+			.notify.fn = NULL,
+			.mem.type = DM_IO_VMA,
+			.mem.ptr.addr = rambuf->data,
+		};
+		region = (struct dm_io_region) {
+			.bdev = wb->cache_dev->bdev,
+			.sector = seg->start_sector,
+			.count = (seg->length + 1) << 3,
+		};
+		if (wb_io(&io_req, 1, &region, NULL, false))
+			return;
+	}
 
-	if (wb_io(&io_req, 1, &region, NULL, false))
-		return;
 
 	/*
 	 * Deferred ACK for barrier requests
@@ -310,12 +361,14 @@ static void prepare_writeback_ios(struct wb_device *wb, struct writeback_segment
 	struct segment_header *seg = writeback_seg->seg;
 
 	u8 i;
+	//printk("prepare_writeback_ios(), length: %llu\n",seg->length);
 	for (i = 0; i < seg->length; i++) {
 		struct writeback_io *writeback_io;
 
 		struct metablock *mb = seg->mb_array + i;
 		struct dirtiness dirtiness = read_mb_dirtiness(wb, seg, mb);
 		ASSERT(dirtiness.data_bits > 0);
+		//(jjo)is_dirty가 false일 때, 즉 
 		if (!dirtiness.is_dirty)
 			continue;
 
@@ -384,21 +437,29 @@ static bool do_writeback_segs(struct wb_device *wb)
  */
 void update_nr_empty_segs(struct wb_device *wb)
 {
+	// 262485 + 244206 - 506691
 	wb->nr_empty_segs =
 		atomic64_read(&wb->last_writeback_segment_id) + wb->nr_segments
 		- wb->current_seg->id;
 }
 
+//writeback 처리할 세그먼트의 개수를 구하는 함수.
 static u32 calc_nr_writeback(struct wb_device *wb)
 {
-	u32 nr_writeback_candidates =
+	u32 nr_writeback_candidates = //f_id에서 wb_id를 빼서 writeback 처리할 세그먼트 개수
 		atomic64_read(&wb->last_flushed_segment_id)
 		- atomic64_read(&wb->last_writeback_segment_id);
 
+	//nr_max_batched_writeback: writeback 처리 가능한 최대 세그먼트 개수.
 	u32 nr_max_batch = ACCESS_ONCE(wb->nr_max_batched_writeback);
 	if (wb->nr_writeback_segs != nr_max_batch)
 		try_alloc_writeback_ios(wb, nr_max_batch, GFP_NOIO | __GFP_NOWARN);
 
+	//nr_writeback_candidates: writeback 처리를 해야할 세그먼트 개수.
+	//nr_writeback_segs: 최대 한번에 writeback 처리 가능한 세그먼트 개수.(default max:32) 
+	//nr_empty_segs: writeback 처리가 끝나서 비어있는 세그먼트 개수.
+	//printk("nr_writeback_candidates: %lu\n nr_writeback_segs: %lu\n nr_empty_segs: %lu\n",
+	//		nr_writeback_candidates,wb->nr_writeback_segs,wb->nr_empty_segs+1);
 	return min3(nr_writeback_candidates, wb->nr_writeback_segs, wb->nr_empty_segs + 1);
 }
 

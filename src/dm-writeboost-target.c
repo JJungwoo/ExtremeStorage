@@ -166,6 +166,7 @@ static bool bio_is_write(struct bio *bio)
  */
 static sector_t calc_cache_alignment(sector_t bio_sector)
 {
+		//(jjo) 512 / 1<<3(8) = 64
 	return div_u64(bio_sector, 1 << 3) * (1 << 3);
 }
 
@@ -217,6 +218,7 @@ static bool taint_mb(struct wb_device *wb, struct metablock *mb, u8 data_bits)
 
 	ASSERT(data_bits > 0);
 	spin_lock_irqsave(&wb->mb_lock, flags);
+	//is_dirty를 true로 바꿔주고 data_bits에 데이터 개수 기록.
 	if (!mb->dirtiness.is_dirty) {
 		mb->dirtiness.is_dirty = true;
 		flipped = true;
@@ -273,8 +275,10 @@ void cursor_init(struct wb_device *wb)
 static u32 advance_cursor(struct wb_device *wb)
 {
 	u32 old;
+	//nr_caches: 실제 cache device내부 세그먼트의 데이터 개수 127 * nr_segments
 	if (wb->cursor == wb->nr_caches)
 		wb->cursor = 0;
+	//현재 cursor의 위치를 반환하고 1 현재 cursor값은 1증가시킨다.
 	old = wb->cursor;
 	wb->cursor++;
 	wb->current_seg->length++;
@@ -286,6 +290,7 @@ static u32 advance_cursor(struct wb_device *wb)
 static bool needs_queue_seg(struct wb_device *wb)
 {
 	bool rambuf_no_space = !mb_idx_inseg(wb, wb->cursor);
+	//더이상 메타블럭 영역이 없을 경우 127꽉채워 0이 될경우 1을 반환함.
 	return rambuf_no_space;
 }
 
@@ -393,6 +398,7 @@ static void queue_current_buffer(struct wb_device *wb)
  */
 static void might_queue_current_buffer(struct wb_device *wb)
 {
+	//127개의 메타블럭에서 더이상 공간이 없을 경우, 즉 세그먼트 512KB가 모두 꽉 찰 경우이다.
 	if (needs_queue_seg(wb)) {
 		update_nr_empty_segs(wb);
 		queue_current_buffer(wb);
@@ -545,19 +551,19 @@ static void cache_lookup(struct wb_device *wb, struct bio *bio, struct lookup_re
 	res->key = (struct lookup_key) {
 		.sector = calc_cache_alignment(bi_sector(bio)),
 	};
-	res->head = ht_get_head(wb, &res->key);
+	res->head = ht_get_head(wb, &res->key); //(jjo)ht list의 헤더를 가져옴. 
 
-	res->found_mb = ht_lookup(wb, res->head, &res->key);
+	res->found_mb = ht_lookup(wb, res->head, &res->key); //ht list 헤더 정보를 통해 metablock를 찾는다.
 	if (res->found_mb) {
 		res->found_seg = mb_to_seg(wb, res->found_mb);
 		atomic_inc(&res->found_seg->nr_inflight_ios);
 	}
 
-	res->found = (res->found_mb != NULL);
+	res->found = (res->found_mb != NULL); //metablock을 찾았으면 found = 1
 
 	res->on_buffer = false;
 	if (res->found)
-		res->on_buffer = is_on_buffer(wb, res->found_mb->idx);
+		res->on_buffer = is_on_buffer(wb, res->found_mb->idx); //rambuffer에 데이터가 있는지 확인.
 
 	inc_stat(wb, bio_is_write(bio), res->found, res->on_buffer, bio_is_fullsize(bio));
 }
@@ -577,6 +583,7 @@ static u8 to_mask(u8 offset, u8 count)
 	if (count == 8) {
 		result = 255;
 	} else {
+		//count 값 만큼 shift 연산을 하여 총 8bit, 즉255 중에 유효한 bit만 result에 채워준다.
 		for (i = 0; i < count; i++)
 			result |= (1 << (i + offset));
 	}
@@ -842,6 +849,7 @@ static void read_cache_cell_copy_data(struct wb_device *wb, struct bio *bio, uns
 	/*
 	 * We can omit copying if the cell is cancelled but
 	 * copying for a non-cancelled cell isn't problematic.
+	 * (jjo)cancelled = true ? copying : non-copying ...?
 	 */
 	if (!cell->cancelled)
 		copy_bio_payload(cell->data, bio);
@@ -1055,7 +1063,16 @@ static void initialize_write_io(struct write_io *wio, struct bio *bio)
 {
 	u8 offset = bio_calc_offset(bio);
 	sector_t count = bio_sectors(bio);
+	/* 
+	 * wio->data는 현재 4096, 총8개의 sector 크기의 공간을 갖고 0으로 초기화 되어있다.
+	 * 따라서 offset 만큼 즉 현재 수집해온 bio 구조체 내부 offset을 구한다. 
+	 * 이때, offset은 실제 데이터의 offset을 말하며 이는 한개당 512B으로 구성되어 있다.
+	 * 따라서 아래의 copy_bio_payload함수를 사용하여 offset개수 * 512B로 wio->data에
+	 * 기록한다.
+	 */
 	copy_bio_payload(wio->data + (offset << 9), bio);
+	//실제 ram에 wio->data 공간에 bio 정보를 memcpy한다.
+	//to_mask를 통해4KB중 얼마나 데이터가 유효한지 나타낸다.
 	wio->data_bits = to_mask(offset, count);
 }
 
@@ -1140,6 +1157,7 @@ static int do_process_write(struct wb_device *wb, struct bio *bio)
 	wio.data = mempool_alloc(wb->buf_8_pool, GFP_NOIO);
 	if (!wio.data)
 		return -ENOMEM;
+	//(jjo)수집한 bio 구조체를 사용하여 wio 임시 버퍼를 bio 정보로 초기화한다.
 	initialize_write_io(&wio, bio);
 
 	mutex_lock(&wb->io_lock);
@@ -1148,6 +1166,7 @@ static int do_process_write(struct wb_device *wb, struct bio *bio)
 
 	if (res.found) {
 		if (unlikely(res.on_buffer)) {
+			//(jjo)기록하려는 데이터가 현재 rambuffer에 있을 경우
 			write_pos = res.found_mb;
 			goto do_write;
 		} else {
@@ -1228,6 +1247,7 @@ static int complete_process_write(struct wb_device *wb, struct bio *bio)
  */
 static int process_write_wb(struct wb_device *wb, struct bio *bio)
 {
+	//printk("process_write_wb() setcor size: %llu\n",bio->bi_sector);
 	int err = do_process_write(wb, bio);
 	if (err) {
 		bio_io_error(bio);
@@ -1254,8 +1274,18 @@ static int process_write_wa(struct wb_device *wb, struct bio *bio)
 	return DM_MAPIO_REMAPPED;
 }
 
+/*
+static int process_adaptive_write(struct wb_device *wb, struct bio *bio)
+{
+
+}
+*/
+
 static int process_write(struct wb_device *wb, struct bio *bio)
 {
+	/*if(adaptive_write_mode)
+		return process_adaptive_write(wb, bio);
+	else*/
 	return wb->write_around_mode ? process_write_wa(wb, bio) : process_write_wb(wb, bio);
 }
 
@@ -1528,12 +1558,14 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 
 	static struct dm_arg _args[] = {
 		{0, 100, "Invalid writeback_threshold"},
-		{1, 32, "Invalid nr_max_batched_writeback"},
+		//{1, 32, "Invalid nr_max_batched_writeback"},
+		{1, 4096, "Invalid nr_max_batched_writeback"},
 		{0, 3600, "Invalid update_sb_record_interval"},
 		{0, 3600, "Invalid sync_data_interval"},
 		{0, 127, "Invalid read_cache_threshold"},
 		{0, 1, "Invalid write_around_mode"},
 		{1, 2048, "Invalid nr_read_cache_cells"},
+		{0, 1, "Invalid adaptive_write_mode"},
 	};
 	unsigned tmp;
 
@@ -1550,6 +1582,7 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 		consume_kv(read_cache_threshold, 4, false);
 		consume_kv(write_around_mode, 5, true);
 		consume_kv(nr_read_cache_cells, 6, true);
+		consume_kv(adaptive_write_mode, 7, true);
 
 		if (!err) {
 			argc--;
@@ -1568,7 +1601,8 @@ static int consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as)
 	struct dm_target *ti = wb->ti;
 
 	static struct dm_arg _args[] = {
-		{0, 14, "Invalid optional argc"},
+		//{0, 14, "Invalid optional argc"},
+		{0, 15, "Invalid optional argc"},
 	};
 	unsigned argc = 0;
 
@@ -1727,7 +1761,7 @@ static void free_ctr_args(struct wb_device *wb)
  * optionals are unordered lists of k-v pair.
  *
  * See doc for detail.
-  */
+ */
 static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 {
 	int err = 0;
@@ -1768,6 +1802,7 @@ static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	save_arg(sync_data_interval);
 	save_arg(read_cache_threshold);
 	save_arg(nr_read_cache_cells);
+	save_arg(adaptive_write_mode);
 
 	err = resume_cache(wb);
 	if (err) {
@@ -1792,6 +1827,7 @@ static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	restore_arg(update_sb_record_interval);
 	restore_arg(sync_data_interval);
 	restore_arg(read_cache_threshold);
+	restore_arg(adaptive_write_mode);
 
 	return err;
 
@@ -1861,6 +1897,18 @@ static int writeboost_message(struct dm_target *ti, unsigned argc, char **argv)
 		wb->force_drop = false;
 		return err;
 	}
+	
+	printk("write_mode str: %s, value:%d\n",argv[0],argv[1]);
+	
+	if (!strcasecmp(argv[0], "adaptive_write_mode_true")) {
+		wb->adaptive_write_mode = true;
+		return 0;
+	}
+
+	if (!strcasecmp(argv[0], "adaptive_write_mode_false")) {
+		wb->adaptive_write_mode = false;
+		return 0;
+	}	
 
 	return do_consume_optional_argv(wb, &as, 2);
 }
@@ -1893,7 +1941,7 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 
 	switch (type) {
 	case STATUSTYPE_INFO:
-		DMEMIT("%u %u %llu %llu %llu %llu %llu",
+		DMEMIT("\ncursor: %u\nnr_caches: %u\nnr_segments: %llu\ncurrent_seg->id: %llu\nqueued_Sid: %llu\nflush_Sid: %llu\nwriteback_Sid: %llu\nnr_dirty_caches: %llu\n",
 		       (unsigned int)
 		       wb->cursor,
 		       (unsigned int)
@@ -1902,6 +1950,8 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 		       wb->nr_segments,
 		       (long long unsigned int)
 		       wb->current_seg->id,
+			   (long long unsigned int)
+			   atomic64_read(&wb->last_queued_segment_id),
 		       (long long unsigned int)
 		       atomic64_read(&wb->last_flushed_segment_id),
 		       (long long unsigned int)
@@ -1911,21 +1961,29 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 
 		for (i = 0; i < STATLEN; i++) {
 			atomic64_t *v = &wb->stat[i];
-			DMEMIT(" %llu", (unsigned long long) atomic64_read(v));
+			DMEMIT(" %llu ", (unsigned long long) atomic64_read(v));
 		}
-		DMEMIT(" %llu", (unsigned long long) atomic64_read(&wb->count_non_full_flushed));
+		DMEMIT(" %llu\n", (unsigned long long) atomic64_read(&wb->count_non_full_flushed));
 
-		DMEMIT(" %d", 10);
-		DMEMIT(" writeback_threshold %d",
+		//DMEMIT(" %d\n", 10);
+		DMEMIT(" nr_max_batched_writeback: %d\n",
+		       wb->nr_max_batched_writeback);
+		DMEMIT(" writeback_threshold: %d\n",
 		       wb->writeback_threshold);
-		DMEMIT(" nr_cur_batched_writeback %u",
+		DMEMIT(" nr_cur_batched_writeback: %u\n",
 		       wb->nr_cur_batched_writeback);
-		DMEMIT(" sync_data_interval %lu",
+		DMEMIT(" sync_data_interval: %lu\n",
 		       wb->sync_data_interval);
-		DMEMIT(" update_sb_record_interval %lu",
+		DMEMIT(" update_sb_record_interval: %lu\n",
 		       wb->update_sb_record_interval);
-		DMEMIT(" read_cache_threshold %u",
+		DMEMIT(" read_cache_threshold: %u\n",
 		       wb->read_cache_threshold);
+		DMEMIT(" nr_empty_segs: %u\n",
+			   wb->nr_empty_segs);
+		DMEMIT(" nr_read_cache_cells: %u\n",
+			   wb->nr_read_cache_cells);
+		DMEMIT(" adaptive_write_mode: %u\n",
+			   wb->adaptive_write_mode);
 		break;
 
 	case STATUSTYPE_TABLE:

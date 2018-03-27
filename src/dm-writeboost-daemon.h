@@ -38,7 +38,10 @@ void wait_for_writeback(struct wb_device *, u64 id);
 void mark_clean_seg(struct wb_device *, struct segment_header *seg);
 
 /*----------------------------------------------------------------------------*/
+//(jjo)
+//int check_io_pattern(struct dm_device *, struct rambuffer *, struct segment_header *);
 
+/*----------------------------------------------------------------------------*/
 int writeback_modulator_proc(void *);
 
 /*----------------------------------------------------------------------------*/

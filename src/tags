@@ -1,0 +1,435 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+ASSERT	dm-writeboost.h	489;"	d
+CREATE_DAEMON	dm-writeboost-metadata.c	1188;"	d	file:
+DM_ENDIO_DONE_COMPAT	dm-writeboost-target.c	1490;"	d	file:
+DM_MSG_PREFIX	dm-writeboost.h	23;"	d
+DM_WRITEBOOST_DAEMON_H	dm-writeboost-daemon.h	21;"	d
+DM_WRITEBOOST_H	dm-writeboost.h	21;"	d
+DM_WRITEBOOST_METADATA_H	dm-writeboost-metadata.h	21;"	d
+KERNEL_SOURCE_VERSION	Makefile	/^KERNEL_SOURCE_VERSION ?= $(shell uname -r)$/;"	m
+KERNEL_TREE	Makefile	/^KERNEL_TREE ?= \/lib\/modules\/$(KERNEL_SOURCE_VERSION)\/build$/;"	m
+NR_RAMBUF_POOL	dm-writeboost.h	248;"	d
+PBD_FLAG	dm-writeboost-target.c	/^enum PBD_FLAG {$/;"	g	file:
+PBD_NONE	dm-writeboost-target.c	/^	PBD_NONE = 0,$/;"	e	enum:PBD_FLAG	file:
+PBD_READ_SEG	dm-writeboost-target.c	/^	PBD_READ_SEG = 2,$/;"	e	enum:PBD_FLAG	file:
+PBD_WILL_CACHE	dm-writeboost-target.c	/^	PBD_WILL_CACHE = 1,$/;"	e	enum:PBD_FLAG	file:
+PER_BIO_DATA_SIZE	dm-writeboost-target.c	692;"	d	file:
+PER_BIO_DATA_SIZE	dm-writeboost-target.c	694;"	d	file:
+RHEL_RELEASE_CODE	dm-writeboost.h	42;"	d
+RHEL_RELEASE_VERSION	dm-writeboost.h	43;"	d
+SEGMENT_SIZE_ORDER	dm-writeboost.h	247;"	d
+STATFLAG	dm-writeboost.h	/^enum STATFLAG {$/;"	g
+STATLEN	dm-writeboost.h	241;"	d
+STAT_FULLSIZE	dm-writeboost.h	/^	STAT_FULLSIZE = 0, \/* Bio is fullsize or partial *\/$/;"	e	enum:STATFLAG
+STAT_HIT	dm-writeboost.h	/^	STAT_HIT = 2, \/* Hit or miss *\/$/;"	e	enum:STATFLAG
+STAT_ON_BUFFER	dm-writeboost.h	/^	STAT_ON_BUFFER = 1, \/* Found on buffer or on the cache device *\/$/;"	e	enum:STATFLAG
+STAT_WRITE	dm-writeboost.h	/^	STAT_WRITE = 3, \/* Write or read *\/$/;"	e	enum:STATFLAG
+SUB_ID	dm-writeboost.h	48;"	d
+SZ_MAX	dm-writeboost.h	142;"	d
+WB_CREATED	dm-writeboost.h	/^	WB_CREATED = 0,$/;"	e	enum:WB_FLAG
+WB_FLAG	dm-writeboost.h	/^enum WB_FLAG {$/;"	g
+WB_IO_READ	dm-writeboost.h	517;"	d
+WB_IO_READ	dm-writeboost.h	524;"	d
+WB_IO_WRITE	dm-writeboost.h	516;"	d
+WB_IO_WRITE	dm-writeboost.h	523;"	d
+WB_IO_WRITE_FUA	dm-writeboost.h	518;"	d
+WB_IO_WRITE_FUA	dm-writeboost.h	525;"	d
+WB_MAGIC	dm-writeboost.h	77;"	d
+__acquire_new_rambuffer	dm-writeboost-target.c	/^static void __acquire_new_rambuffer(struct wb_device *wb, u64 id)$/;"	f	file:
+__acquire_new_seg	dm-writeboost-target.c	/^static void __acquire_new_seg(struct wb_device *wb, u64 id)$/;"	f	file:
+__copy_to_bio_payload	dm-writeboost-target.c	/^static void __copy_to_bio_payload(struct bio *bio, void *buf, u8 i)$/;"	f	file:
+__packed	dm-writeboost.h	/^} __packed;$/;"	v	typeref:struct:metablock_device
+__packed	dm-writeboost.h	/^} __packed;$/;"	v	typeref:struct:segment_header_device
+__packed	dm-writeboost.h	/^} __packed;$/;"	v	typeref:struct:superblock_header_device
+__packed	dm-writeboost.h	/^} __packed;$/;"	v	typeref:struct:superblock_record_device
+ack_count	dm-writeboost.h	/^	atomic_t ack_count;$/;"	m	struct:read_cache_cells
+acquire_new_seg	dm-writeboost-target.c	/^void acquire_new_seg(struct wb_device *wb, u64 id)$/;"	f
+adaptive_write_mode	dm-writeboost.h	/^	bool adaptive_write_mode;$/;"	m	struct:wb_device
+add_writeback_io	dm-writeboost-daemon.c	/^static void add_writeback_io(struct wb_device *wb, struct writeback_io *writeback_io)$/;"	f	file:
+advance_cursor	dm-writeboost-target.c	/^static u32 advance_cursor(struct wb_device *wb)$/;"	f	file:
+alloc_read_cache_cells	dm-writeboost-target.c	/^static struct read_cache_cells *alloc_read_cache_cells(struct wb_device *wb, u32 n)$/;"	f	file:
+alloc_writeback_segment	dm-writeboost-metadata.c	/^static struct writeback_segment *alloc_writeback_segment(struct wb_device *wb, gfp_t gfp)$/;"	f	file:
+allow_writeback	dm-writeboost.h	/^	int allow_writeback;$/;"	m	struct:wb_device
+apply_metablock_device	dm-writeboost-metadata.c	/^static int apply_metablock_device(struct wb_device *wb, struct segment_header *seg,$/;"	f	file:
+apply_segment_header_device	dm-writeboost-metadata.c	/^static int apply_segment_header_device(struct wb_device *wb, struct segment_header *seg,$/;"	f	file:
+apply_valid_segments	dm-writeboost-metadata.c	/^static int apply_valid_segments(struct wb_device *wb, u64 *max_id)$/;"	f	file:
+array	dm-writeboost.h	/^	struct read_cache_cell *array;$/;"	m	struct:read_cache_cells	typeref:struct:read_cache_cells::read_cache_cell
+audit_cache_device	dm-writeboost-metadata.c	/^static int audit_cache_device(struct wb_device *wb)$/;"	f	file:
+backing_dev	dm-writeboost.h	/^	struct dm_dev *backing_dev; \/* Slow device (HDD) *\/$/;"	m	struct:wb_device	typeref:struct:wb_device::dm_dev
+barrier_ios	dm-writeboost.h	/^	struct bio_list barrier_ios; \/* List of barrier requests *\/$/;"	m	struct:wb_device	typeref:struct:wb_device::bio_list
+barrier_ios	dm-writeboost.h	/^	struct bio_list barrier_ios; \/* List of deferred bios *\/$/;"	m	struct:rambuffer	typeref:struct:rambuffer::bio_list
+barrier_wq	dm-writeboost.h	/^	struct workqueue_struct *barrier_wq;$/;"	m	struct:wb_device	typeref:struct:wb_device::workqueue_struct
+bi_sector	dm-writeboost-target.c	127;"	d	file:
+bi_sector	dm-writeboost-target.c	129;"	d	file:
+bio	dm-writeboost-target.c	/^	struct bio *bio;$/;"	m	struct:read_backing_async_context	typeref:struct:read_backing_async_context::bio	file:
+bio_calc_offset	dm-writeboost-target.c	/^static u8 bio_calc_offset(struct bio *bio)$/;"	f	file:
+bio_io_success_compat	dm-writeboost-target.c	/^void bio_io_success_compat(struct bio *bio)$/;"	f
+bio_is_barrier	dm-writeboost.h	514;"	d
+bio_is_barrier	dm-writeboost.h	521;"	d
+bio_is_fua	dm-writeboost.h	515;"	d
+bio_is_fua	dm-writeboost.h	522;"	d
+bio_is_fullsize	dm-writeboost-target.c	/^static bool bio_is_fullsize(struct bio *bio)$/;"	f	file:
+bio_is_write	dm-writeboost-target.c	/^static bool bio_is_write(struct bio *bio)$/;"	f	file:
+bio_remap	dm-writeboost-target.c	/^static void bio_remap(struct bio *bio, struct dm_dev *dev, sector_t sector)$/;"	f	file:
+buf	dm-writeboost.h	/^	void *buf; \/* Sequentially read *\/$/;"	m	struct:writeback_segment
+buf_8_cachep	dm-writeboost.h	/^	struct kmem_cache *buf_8_cachep;$/;"	m	struct:wb_device	typeref:struct:wb_device::kmem_cache
+buf_8_pool	dm-writeboost.h	/^	mempool_t *buf_8_pool; \/* 8 sector buffer pool *\/$/;"	m	struct:wb_device
+bv_it	dm-writeboost-target.c	462;"	d	file:
+bv_it	dm-writeboost-target.c	468;"	d	file:
+bv_len	dm-writeboost-target.c	461;"	d	file:
+bv_len	dm-writeboost-target.c	467;"	d	file:
+bv_offset	dm-writeboost-target.c	460;"	d	file:
+bv_offset	dm-writeboost-target.c	466;"	d	file:
+bv_page	dm-writeboost-target.c	459;"	d	file:
+bv_page	dm-writeboost-target.c	465;"	d	file:
+bv_vec	dm-writeboost-target.c	458;"	d	file:
+bv_vec	dm-writeboost-target.c	464;"	d	file:
+cache_dev	dm-writeboost.h	/^	struct dm_dev *cache_dev; \/* Fast device (SSD) *\/$/;"	m	struct:wb_device	typeref:struct:wb_device::dm_dev
+cache_lookup	dm-writeboost-target.c	/^static void cache_lookup(struct wb_device *wb, struct bio *bio, struct lookup_result *res)$/;"	f	file:
+calc_cache_alignment	dm-writeboost-target.c	/^static sector_t calc_cache_alignment(sector_t bio_sector)$/;"	f	file:
+calc_checksum	dm-writeboost-metadata.c	/^u32 calc_checksum(void *rambuffer, u8 length)$/;"	f
+calc_mb_start_sector	dm-writeboost-metadata.c	/^sector_t calc_mb_start_sector(struct wb_device *wb, struct segment_header *seg, u32 mb_idx)$/;"	f
+calc_nr_segments	dm-writeboost-metadata.c	/^static u32 calc_nr_segments(struct dm_dev *dev, struct wb_device *wb)$/;"	f	file:
+calc_nr_writeback	dm-writeboost-daemon.c	/^static u32 calc_nr_writeback(struct wb_device *wb)$/;"	f	file:
+calc_offset	dm-writeboost-target.c	/^static u8 calc_offset(sector_t sector)$/;"	f	file:
+calc_segment_header_start	dm-writeboost-metadata.c	/^static sector_t calc_segment_header_start(struct wb_device *wb, u32 k)$/;"	f	file:
+cancelled	dm-writeboost.h	/^	bool cancelled; \/* Don't include this *\/$/;"	m	struct:read_cache_cell
+cell_idx	dm-writeboost-target.c	/^		u32 cell_idx;$/;"	m	union:per_bio_data::__anon1	file:
+check_buffer_alignment	dm-writeboost.h	491;"	d
+check_io_pattern	dm-writeboost-daemon.c	/^int check_io_pattern(struct dm_device *wb, struct rambuffer *rambuf, struct segment_header *seg)$/;"	f
+checksum	dm-writeboost.h	/^	__le32 checksum;$/;"	m	struct:segment_header_device
+clear_stat	dm-writeboost-target.c	/^static void clear_stat(struct wb_device *wb)$/;"	f	file:
+compare_writeback_io	dm-writeboost-daemon.c	/^static bool compare_writeback_io(struct writeback_io *a, struct writeback_io *b)$/;"	f	file:
+complete	dm-writeboost-metadata.c	/^	struct completion complete;$/;"	m	struct:zeroing_context	typeref:struct:zeroing_context::completion	file:
+complete_process_write	dm-writeboost-target.c	/^static int complete_process_write(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+consume_essential_argv	dm-writeboost-target.c	/^static int consume_essential_argv(struct wb_device *wb, struct dm_arg_set *as)$/;"	f	file:
+consume_kv	dm-writeboost-target.c	1538;"	d	file:
+consume_optional_argv	dm-writeboost-target.c	/^static int consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as)$/;"	f	file:
+copier	dm-writeboost.h	/^	struct dm_kcopyd_client *copier;$/;"	m	struct:wb_device	typeref:struct:wb_device::dm_kcopyd_client
+copy_barrier_requests	dm-writeboost-target.c	/^static void copy_barrier_requests(struct rambuffer *rambuf, struct wb_device *wb)$/;"	f	file:
+copy_bio_payload	dm-writeboost-target.c	/^static void copy_bio_payload(void *buf, struct bio *bio)$/;"	f	file:
+copy_ctr_args	dm-writeboost-target.c	/^static int copy_ctr_args(struct wb_device *wb, int argc, const char **argv)$/;"	f	file:
+copy_to_bio_payload	dm-writeboost-target.c	/^static void copy_to_bio_payload(struct bio *bio, void *buf, u8 copy_bits)$/;"	f	file:
+count	dm-writeboost-metadata.c	/^	atomic64_t count;$/;"	m	struct:format_segmd_context	file:
+count_dirty_caches_remained	dm-writeboost-target.c	/^static u8 count_dirty_caches_remained(struct segment_header *seg)$/;"	f	file:
+count_non_full_flushed	dm-writeboost.h	/^	atomic64_t count_non_full_flushed;$/;"	m	struct:wb_device
+ctr_args	dm-writeboost.h	/^	const char **ctr_args;$/;"	m	struct:wb_device
+current_rambuf	dm-writeboost.h	/^	struct rambuffer *current_rambuf;$/;"	m	struct:wb_device	typeref:struct:wb_device::rambuffer
+current_seg	dm-writeboost.h	/^	struct segment_header *current_seg;$/;"	m	struct:wb_device	typeref:struct:wb_device::segment_header
+cursor	dm-writeboost.h	/^	u32 cursor; \/* Metablock index to write next *\/$/;"	m	struct:wb_device
+cursor	dm-writeboost.h	/^	u32 cursor;$/;"	m	struct:read_cache_cells
+cursor_init	dm-writeboost-target.c	/^void cursor_init(struct wb_device *wb)$/;"	f
+data	dm-writeboost-metadata.c	/^	void *data;$/;"	m	struct:large_array	file:
+data	dm-writeboost.h	/^	void *data; \/* 4KB *\/$/;"	m	struct:write_io
+data	dm-writeboost.h	/^	void *data; \/* 4KB data read *\/$/;"	m	struct:read_cache_cell
+data	dm-writeboost.h	/^	void *data;$/;"	m	struct:rambuffer
+data	dm-writeboost.h	/^	void *data;$/;"	m	struct:writeback_io
+data_bits	dm-writeboost.h	/^	u8 data_bits;$/;"	m	struct:dirtiness
+data_bits	dm-writeboost.h	/^	u8 data_bits;$/;"	m	struct:write_io
+data_bits	dm-writeboost.h	/^	u8 data_bits;$/;"	m	struct:writeback_io
+data_synchronizer	dm-writeboost.h	/^	struct task_struct *data_synchronizer;$/;"	m	struct:wb_device	typeref:struct:wb_device::task_struct
+data_synchronizer_proc	dm-writeboost-daemon.c	/^int data_synchronizer_proc(void *data)$/;"	f
+dec_inflight_ios	dm-writeboost-target.c	/^static void dec_inflight_ios(struct wb_device *wb, struct segment_header *seg)$/;"	f	file:
+dec_nr_dirty_caches	dm-writeboost-target.c	/^void dec_nr_dirty_caches(struct wb_device *wb)$/;"	f
+dirtiness	dm-writeboost.h	/^	struct dirtiness dirtiness;$/;"	m	struct:metablock	typeref:struct:metablock::dirtiness
+dirtiness	dm-writeboost.h	/^struct dirtiness {$/;"	s
+dirty_bits	dm-writeboost.h	/^	__u8 dirty_bits;$/;"	m	struct:metablock_device
+discard_caches_inseg	dm-writeboost-metadata.c	/^void discard_caches_inseg(struct wb_device *wb, struct segment_header *seg)$/;"	f
+dm-writeboost-objs	Makefile	/^dm-writeboost-objs := \\$/;"	m
+dm_devsize	dm-writeboost-target.c	/^sector_t dm_devsize(struct dm_dev *dev)$/;"	f
+do_apply_valid_segments	dm-writeboost-metadata.c	/^static int do_apply_valid_segments(struct wb_device *wb, u64 *max_id)$/;"	f	file:
+do_check_buffer_alignment	dm-writeboost-target.c	/^void do_check_buffer_alignment(void *buf, const char *name, const char *caller)$/;"	f
+do_consume_optional_argv	dm-writeboost-target.c	/^static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as, unsigned argc)$/;"	f	file:
+do_find_max_id	dm-writeboost-metadata.c	/^static int do_find_max_id(struct wb_device *wb, u64 *max_id)$/;"	f	file:
+do_flush_proc	dm-writeboost-daemon.c	/^static void do_flush_proc(struct wb_device *wb)$/;"	f	file:
+do_format	dm-writeboost.h	/^	bool do_format; \/* True if it was the first creation *\/$/;"	m	struct:wb_device
+do_process_write	dm-writeboost-target.c	/^static int do_process_write(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+do_writeback_proc	dm-writeboost-daemon.c	/^static void do_writeback_proc(struct wb_device *wb)$/;"	f	file:
+do_writeback_segs	dm-writeboost-daemon.c	/^static bool do_writeback_segs(struct wb_device *wb)$/;"	f	file:
+do_zeroing_region	dm-writeboost-metadata.c	/^static int do_zeroing_region(struct wb_device *wb, struct dm_io_region *region)$/;"	f	file:
+elemsize	dm-writeboost-metadata.c	/^	u32 elemsize;$/;"	m	struct:large_array	file:
+err	dm-writeboost-metadata.c	/^	int err;$/;"	m	struct:format_segmd_context	file:
+err	dm-writeboost-target.c	/^	int err;$/;"	m	struct:wb_io	file:
+err_bits	dm-writeboost-target.c	/^	unsigned long err_bits;$/;"	m	struct:wb_io	file:
+error	dm-writeboost-metadata.c	/^	int error;$/;"	m	struct:zeroing_context	file:
+fill_payload_by_backing	dm-writeboost-target.c	/^static int fill_payload_by_backing(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+fill_writeback_seg	dm-writeboost-daemon.c	/^static int fill_writeback_seg(struct wb_device *wb, struct writeback_segment *writeback_seg)$/;"	f	file:
+find_max_id	dm-writeboost-metadata.c	/^static int find_max_id(struct wb_device *wb, u64 *max_id)$/;"	f	file:
+flags	dm-writeboost.h	/^	unsigned long flags;$/;"	m	struct:wb_device
+flush_barrier_ios	dm-writeboost-daemon.c	/^void flush_barrier_ios(struct work_struct *work)$/;"	f
+flush_barrier_work	dm-writeboost.h	/^	struct work_struct flush_barrier_work;$/;"	m	struct:wb_device	typeref:struct:wb_device::work_struct
+flush_current_buffer	dm-writeboost-target.c	/^void flush_current_buffer(struct wb_device *wb)$/;"	f
+flush_daemon	dm-writeboost.h	/^	struct task_struct *flush_daemon;$/;"	m	struct:wb_device	typeref:struct:wb_device::task_struct
+flush_daemon_proc	dm-writeboost-daemon.c	/^int flush_daemon_proc(void *data)$/;"	f
+flush_wait_queue	dm-writeboost.h	/^	wait_queue_head_t flush_wait_queue;$/;"	m	struct:wb_device
+force_drop	dm-writeboost.h	/^	int force_drop; \/* Don't stop writeback *\/$/;"	m	struct:wb_device
+format_all_segment_headers	dm-writeboost-metadata.c	/^static int format_all_segment_headers(struct wb_device *wb)$/;"	f	file:
+format_cache_device	dm-writeboost-metadata.c	/^static int format_cache_device(struct wb_device *wb)$/;"	f	file:
+format_segmd_context	dm-writeboost-metadata.c	/^struct format_segmd_context {$/;"	s	file:
+format_segmd_endio	dm-writeboost-metadata.c	/^static void format_segmd_endio(unsigned long error, void *__context)$/;"	f	file:
+format_superblock_header	dm-writeboost-metadata.c	/^static int format_superblock_header(struct wb_device *wb)$/;"	f	file:
+found	dm-writeboost-target.c	/^	bool found; \/* Cache hit? *\/$/;"	m	struct:lookup_result	file:
+found_mb	dm-writeboost-target.c	/^	struct metablock *found_mb;$/;"	m	struct:lookup_result	typeref:struct:lookup_result::metablock	file:
+found_seg	dm-writeboost-target.c	/^	struct segment_header *found_seg;$/;"	m	struct:lookup_result	typeref:struct:lookup_result::segment_header	file:
+free_cache	dm-writeboost-metadata.c	/^void free_cache(struct wb_device *wb)$/;"	f
+free_core_struct	dm-writeboost-target.c	/^static void free_core_struct(struct wb_device *wb)$/;"	f	file:
+free_ctr_args	dm-writeboost-target.c	/^static void free_ctr_args(struct wb_device *wb)$/;"	f	file:
+free_devices	dm-writeboost-metadata.c	/^static void free_devices(struct wb_device *wb)$/;"	f	file:
+free_ht	dm-writeboost-metadata.c	/^static void free_ht(struct wb_device *wb)$/;"	f	file:
+free_metadata	dm-writeboost-metadata.c	/^static void free_metadata(struct wb_device *wb)$/;"	f	file:
+free_rambuf_pool	dm-writeboost-metadata.c	/^static void free_rambuf_pool(struct wb_device *wb)$/;"	f	file:
+free_read_cache_cell_data	dm-writeboost-target.c	/^static void free_read_cache_cell_data(struct read_cache_cells *cells)$/;"	f	file:
+free_read_cache_cells	dm-writeboost-target.c	/^static void free_read_cache_cells(struct wb_device *wb)$/;"	f	file:
+free_segment_header_array	dm-writeboost-metadata.c	/^static void free_segment_header_array(struct wb_device *wb)$/;"	f	file:
+free_writeback_ios	dm-writeboost-metadata.c	/^static void free_writeback_ios(struct wb_device *wb)$/;"	f	file:
+free_writeback_segment	dm-writeboost-metadata.c	/^static void free_writeback_segment(struct wb_device *wb, struct writeback_segment *writeback_seg)$/;"	f	file:
+get_rambuffer_by_id	dm-writeboost-metadata.c	/^struct rambuffer *get_rambuffer_by_id(struct wb_device *wb, u64 id)$/;"	f
+get_segment_header_by_id	dm-writeboost-metadata.c	/^struct segment_header *get_segment_header_by_id(struct wb_device *wb, u64 id)$/;"	f
+head	dm-writeboost-target.c	/^	struct ht_head *head; \/* Lookup head used *\/$/;"	m	struct:lookup_result	typeref:struct:lookup_result::ht_head	file:
+ht_del	dm-writeboost-metadata.c	/^void ht_del(struct wb_device *wb, struct metablock *mb)$/;"	f
+ht_empty_init	dm-writeboost-metadata.c	/^static int ht_empty_init(struct wb_device *wb)$/;"	f	file:
+ht_get_head	dm-writeboost-metadata.c	/^struct ht_head *ht_get_head(struct wb_device *wb, struct lookup_key *key)$/;"	f
+ht_head	dm-writeboost-metadata.c	/^struct ht_head {$/;"	s	file:
+ht_list	dm-writeboost-metadata.c	/^	struct hlist_head ht_list;$/;"	m	struct:ht_head	typeref:struct:ht_head::hlist_head	file:
+ht_list	dm-writeboost.h	/^	struct hlist_node ht_list; \/* Linked to the hash table *\/$/;"	m	struct:metablock	typeref:struct:metablock::hlist_node
+ht_lookup	dm-writeboost-metadata.c	/^struct metablock *ht_lookup(struct wb_device *wb, struct ht_head *head,$/;"	f
+ht_register	dm-writeboost-metadata.c	/^void ht_register(struct wb_device *wb, struct ht_head *head,$/;"	f
+htable	dm-writeboost.h	/^	struct large_array *htable;$/;"	m	struct:wb_device	typeref:struct:wb_device::large_array
+htsize	dm-writeboost.h	/^	size_t htsize; \/* Number of buckets in the hash table *\/$/;"	m	struct:wb_device
+id	dm-writeboost.h	/^	__le64 id;$/;"	m	struct:segment_header_device
+id	dm-writeboost.h	/^	u64 id; \/* Key *\/$/;"	m	struct:writeback_io
+id	dm-writeboost.h	/^	u64 id; \/* Must be initialized to 0 *\/$/;"	m	struct:segment_header
+idx	dm-writeboost.h	/^	u32 idx; \/* Const. Index in the metablock array *\/$/;"	m	struct:metablock
+inc_nr_dirty_caches	dm-writeboost-target.c	/^void inc_nr_dirty_caches(struct wb_device *wb)$/;"	f
+inc_stat	dm-writeboost-target.c	/^static void inc_stat(struct wb_device *wb,$/;"	f	file:
+inc_writeback_io_count	dm-writeboost-daemon.c	/^static void inc_writeback_io_count(u8 data_bits, size_t *writeback_io_count)$/;"	f	file:
+infer_last_writeback_id	dm-writeboost-metadata.c	/^static int infer_last_writeback_id(struct wb_device *wb)$/;"	f	file:
+inflight_ios_wq	dm-writeboost.h	/^	wait_queue_head_t inflight_ios_wq;$/;"	m	struct:wb_device
+init_core_struct	dm-writeboost-target.c	/^static int init_core_struct(struct dm_target *ti)$/;"	f	file:
+init_data_synchronizer	dm-writeboost-metadata.c	/^static int init_data_synchronizer(struct wb_device *wb)$/;"	f	file:
+init_devices	dm-writeboost-metadata.c	/^static int init_devices(struct wb_device *wb)$/;"	f	file:
+init_flush_barrier_work	dm-writeboost-metadata.c	/^static int init_flush_barrier_work(struct wb_device *wb)$/;"	f	file:
+init_flush_daemon	dm-writeboost-metadata.c	/^static int init_flush_daemon(struct wb_device *wb)$/;"	f	file:
+init_metadata	dm-writeboost-metadata.c	/^static int init_metadata(struct wb_device *wb)$/;"	f	file:
+init_rambuf_pool	dm-writeboost-metadata.c	/^static int init_rambuf_pool(struct wb_device *wb)$/;"	f	file:
+init_rambuffer	dm-writeboost-target.c	/^static void init_rambuffer(struct wb_device *wb)$/;"	f	file:
+init_read_cache_cells	dm-writeboost-target.c	/^static int init_read_cache_cells(struct wb_device *wb)$/;"	f	file:
+init_sb_record_updater	dm-writeboost-metadata.c	/^static int init_sb_record_updater(struct wb_device *wb)$/;"	f	file:
+init_segment_header_array	dm-writeboost-metadata.c	/^static int init_segment_header_array(struct wb_device *wb)$/;"	f	file:
+init_writeback_daemon	dm-writeboost-metadata.c	/^static int init_writeback_daemon(struct wb_device *wb)$/;"	f	file:
+init_writeback_modulator	dm-writeboost-metadata.c	/^static int init_writeback_modulator(struct wb_device *wb)$/;"	f	file:
+initialize_write_io	dm-writeboost-target.c	/^static void initialize_write_io(struct write_io *wio, struct bio *bio)$/;"	f	file:
+inject_read_cache	dm-writeboost-target.c	/^static void inject_read_cache(struct wb_device *wb, struct read_cache_cell *cell)$/;"	f	file:
+io_client	dm-writeboost.h	/^	struct dm_io_client *io_client;$/;"	m	struct:wb_device	typeref:struct:wb_device::dm_io_client
+io_lock	dm-writeboost.h	/^	struct mutex io_lock; \/* Mutex is light-weighed *\/$/;"	m	struct:wb_device	typeref:struct:wb_device::mutex
+io_req	dm-writeboost-target.c	/^	struct dm_io_request *io_req;$/;"	m	struct:wb_io	typeref:struct:wb_io::dm_io_request	file:
+io_wq	dm-writeboost.h	/^	struct workqueue_struct *io_wq;$/;"	m	struct:wb_device	typeref:struct:wb_device::workqueue_struct
+ios	dm-writeboost.h	/^	struct writeback_io *ios;$/;"	m	struct:writeback_segment	typeref:struct:writeback_segment::writeback_io
+is_dirty	dm-writeboost.h	/^	bool is_dirty;$/;"	m	struct:dirtiness
+is_on_buffer	dm-writeboost-metadata.c	/^bool is_on_buffer(struct wb_device *wb, u32 mb_idx)$/;"	f
+key	dm-writeboost-target.c	/^	struct lookup_key key; \/* Lookup key used *\/$/;"	m	struct:lookup_result	typeref:struct:lookup_result::lookup_key	file:
+large_array	dm-writeboost-metadata.c	/^struct large_array {$/;"	s	file:
+large_array_alloc	dm-writeboost-metadata.c	/^static struct large_array *large_array_alloc(u32 elemsize, u64 nr_elems)$/;"	f	file:
+large_array_at	dm-writeboost-metadata.c	/^static void *large_array_at(struct large_array *arr, u64 i)$/;"	f	file:
+large_array_free	dm-writeboost-metadata.c	/^static void large_array_free(struct large_array *arr)$/;"	f	file:
+last_flushed_segment_id	dm-writeboost.h	/^	atomic64_t last_flushed_segment_id;$/;"	m	struct:wb_device
+last_queued_segment_id	dm-writeboost.h	/^	atomic64_t last_queued_segment_id;$/;"	m	struct:wb_device
+last_sector	dm-writeboost.h	/^	sector_t last_sector; \/* The last read sector in foreground *\/$/;"	m	struct:read_cache_cells
+last_writeback_segment_id	dm-writeboost.h	/^	__le64 last_writeback_segment_id;$/;"	m	struct:superblock_record_device
+last_writeback_segment_id	dm-writeboost.h	/^	atomic64_t last_writeback_segment_id;$/;"	m	struct:wb_device
+length	dm-writeboost.h	/^	__u8 length;$/;"	m	struct:segment_header_device
+length	dm-writeboost.h	/^	u8 length; \/* The number of valid metablocks *\/$/;"	m	struct:segment_header
+lookup_key	dm-writeboost-metadata.h	/^struct lookup_key {$/;"	s
+lookup_read_cache_cell	dm-writeboost-target.c	/^static struct read_cache_cell *lookup_read_cache_cell(struct wb_device *wb, sector_t sector)$/;"	f	file:
+lookup_result	dm-writeboost-target.c	/^struct lookup_result {$/;"	s	file:
+magic	dm-writeboost.h	/^	__le32 magic;$/;"	m	struct:superblock_header_device
+mark_clean_mb	dm-writeboost-target.c	/^bool mark_clean_mb(struct wb_device *wb, struct metablock *mb)$/;"	f
+mark_clean_seg	dm-writeboost-daemon.c	/^void mark_clean_seg(struct wb_device *wb, struct segment_header *seg)$/;"	f
+mb_array	dm-writeboost.h	/^	struct metablock mb_array[0];$/;"	m	struct:segment_header	typeref:struct:segment_header::metablock
+mb_array_empty_init	dm-writeboost-metadata.c	/^static void mb_array_empty_init(struct wb_device *wb)$/;"	f	file:
+mb_at	dm-writeboost-metadata.c	/^static struct metablock *mb_at(struct wb_device *wb, u32 idx)$/;"	f	file:
+mb_hit	dm-writeboost-metadata.c	/^static bool mb_hit(struct metablock *mb, struct lookup_key *key)$/;"	f	file:
+mb_idx_inseg	dm-writeboost-metadata.c	/^u8 mb_idx_inseg(struct wb_device *wb, u32 mb_idx)$/;"	f
+mb_lock	dm-writeboost.h	/^	spinlock_t mb_lock;$/;"	m	struct:wb_device
+mb_to_seg	dm-writeboost-metadata.c	/^struct segment_header *mb_to_seg(struct wb_device *wb, struct metablock *mb)$/;"	f
+mbarr	dm-writeboost.h	/^	struct metablock_device mbarr[0]; \/* 16B * N *\/$/;"	m	struct:segment_header_device	typeref:struct:segment_header_device::metablock_device
+memcpy_masked	dm-writeboost-target.c	/^static void memcpy_masked(void *to, u8 protect_bits, void *from, u8 copy_bits)$/;"	f	file:
+metablock	dm-writeboost.h	/^struct metablock {$/;"	s
+metablock_device	dm-writeboost.h	/^struct metablock_device {$/;"	s
+might_cancel_read_cache_cell	dm-writeboost-target.c	/^static void might_cancel_read_cache_cell(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+might_format_cache_device	dm-writeboost-metadata.c	/^static int might_format_cache_device(struct wb_device *wb)$/;"	f	file:
+might_queue_current_buffer	dm-writeboost-target.c	/^static void might_queue_current_buffer(struct wb_device *wb)$/;"	f	file:
+needs_queue_seg	dm-writeboost-target.c	/^static bool needs_queue_seg(struct wb_device *wb)$/;"	f	file:
+nr_caches	dm-writeboost.h	/^	u32 nr_caches; \/* Const *\/$/;"	m	struct:wb_device
+nr_caches_inseg	dm-writeboost.h	/^	u8 nr_caches_inseg; \/* Const *\/$/;"	m	struct:wb_device
+nr_ctr_args	dm-writeboost.h	/^	unsigned nr_ctr_args;$/;"	m	struct:wb_device
+nr_cur_batched_writeback	dm-writeboost.h	/^	u32 nr_cur_batched_writeback; \/* Number of segments to be written back *\/$/;"	m	struct:wb_device
+nr_dirty_caches	dm-writeboost.h	/^	atomic64_t nr_dirty_caches;$/;"	m	struct:wb_device
+nr_elems	dm-writeboost-metadata.c	/^	u64 nr_elems;$/;"	m	struct:large_array	file:
+nr_empty_segs	dm-writeboost.h	/^	u32 nr_empty_segs;$/;"	m	struct:wb_device
+nr_inflight_ios	dm-writeboost.h	/^	atomic_t nr_inflight_ios;$/;"	m	struct:segment_header
+nr_max_batched_writeback	dm-writeboost.h	/^	u32 nr_max_batched_writeback; \/* Tunable *\/$/;"	m	struct:wb_device
+nr_max_batched_writeback_saved	dm-writeboost.h	/^	u32 nr_max_batched_writeback_saved;$/;"	m	struct:wb_device
+nr_read_cache_cells	dm-writeboost.h	/^	u32 nr_read_cache_cells;$/;"	m	struct:wb_device
+nr_read_cache_cells_saved	dm-writeboost.h	/^	u32 nr_read_cache_cells_saved;$/;"	m	struct:wb_device
+nr_segments	dm-writeboost.h	/^	u32 nr_segments; \/* Const *\/$/;"	m	struct:wb_device
+nr_writeback_segs	dm-writeboost.h	/^	u32 nr_writeback_segs;$/;"	m	struct:wb_device
+null_head	dm-writeboost.h	/^	struct ht_head *null_head;$/;"	m	struct:wb_device	typeref:struct:wb_device::ht_head
+num_regions	dm-writeboost-target.c	/^	unsigned num_regions;$/;"	m	struct:wb_io	file:
+obj-m	Makefile	/^obj-m := dm-writeboost.o$/;"	m
+on_buffer	dm-writeboost-target.c	/^	bool on_buffer; \/* Is the metablock found on the RAM buffer? *\/$/;"	m	struct:lookup_result	file:
+over_threshold	dm-writeboost.h	/^	bool over_threshold;$/;"	m	struct:read_cache_cells
+padding	dm-writeboost.h	/^	__u8 padding[16 - (8 + 1)]; \/* 16B *\/$/;"	m	struct:metablock_device
+padding	dm-writeboost.h	/^	__u8 padding[512 - (8 + 4 + 1)]; \/* 512B *\/$/;"	m	struct:segment_header_device
+per_bio_data	dm-writeboost-target.c	/^struct per_bio_data {$/;"	s	file:
+per_bio_data	dm-writeboost-target.c	703;"	d	file:
+prepare_first_seg	dm-writeboost-metadata.c	/^static void prepare_first_seg(struct wb_device *wb)$/;"	f	file:
+prepare_new_seg	dm-writeboost-target.c	/^static void prepare_new_seg(struct wb_device *wb)$/;"	f	file:
+prepare_new_write_pos	dm-writeboost-target.c	/^static struct metablock *prepare_new_write_pos(struct wb_device *wb)$/;"	f	file:
+prepare_overwrite	dm-writeboost-target.c	/^int prepare_overwrite(struct wb_device *wb, struct segment_header *seg, struct metablock *old_mb, struct write_io* wio, u8 overwrite_bits)$/;"	f
+prepare_rambuffer	dm-writeboost-target.c	/^static void prepare_rambuffer(struct rambuffer *rambuf,$/;"	f	file:
+prepare_segment_header_device	dm-writeboost-metadata.c	/^void prepare_segment_header_device(void *rambuffer,$/;"	f
+prepare_writeback_ios	dm-writeboost-daemon.c	/^static void prepare_writeback_ios(struct wb_device *wb, struct writeback_segment *writeback_seg,$/;"	f	file:
+process_barrier_bio	dm-writeboost-target.c	/^static int process_barrier_bio(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+process_bio	dm-writeboost-target.c	/^static int process_bio(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+process_deferred_barriers	dm-writeboost-daemon.c	/^static void process_deferred_barriers(struct wb_device *wb, struct rambuffer *rambuf)$/;"	f	file:
+process_read	dm-writeboost-target.c	/^static int process_read(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+process_write	dm-writeboost-target.c	/^static int process_write(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+process_write_wa	dm-writeboost-target.c	/^static int process_write_wa(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+process_write_wb	dm-writeboost-target.c	/^static int process_write_wb(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+queue_barrier_io	dm-writeboost-daemon.c	/^void queue_barrier_io(struct wb_device *wb, struct bio *bio)$/;"	f
+queue_current_buffer	dm-writeboost-target.c	/^static void queue_current_buffer(struct wb_device *wb)$/;"	f	file:
+queue_flush_job	dm-writeboost-target.c	/^static void queue_flush_job(struct wb_device *wb)$/;"	f	file:
+rambuf_pool	dm-writeboost.h	/^	struct rambuffer *rambuf_pool;$/;"	m	struct:wb_device	typeref:struct:wb_device::rambuffer
+rambuffer	dm-writeboost.h	/^struct rambuffer {$/;"	s
+rb_node	dm-writeboost.h	/^	struct rb_node rb_node;$/;"	m	struct:read_cache_cell	typeref:struct:read_cache_cell::rb_node
+rb_node	dm-writeboost.h	/^	struct rb_node rb_node;$/;"	m	struct:writeback_io	typeref:struct:writeback_io::rb_node
+rb_root	dm-writeboost.h	/^	struct rb_root rb_root;$/;"	m	struct:read_cache_cells	typeref:struct:read_cache_cells::rb_root
+read_backing_async	dm-writeboost-target.c	/^static int read_backing_async(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+read_backing_async_callback	dm-writeboost-target.c	/^static void read_backing_async_callback(unsigned long error, void *context)$/;"	f	file:
+read_backing_async_callback_onstack	dm-writeboost-target.c	/^static void read_backing_async_callback_onstack(unsigned long error, struct read_backing_async_context *ctx)$/;"	f	file:
+read_backing_async_context	dm-writeboost-target.c	/^struct read_backing_async_context {$/;"	s	file:
+read_cache_add	dm-writeboost-target.c	/^static void read_cache_add(struct read_cache_cells *cells, struct read_cache_cell *cell)$/;"	f	file:
+read_cache_cancel_background	dm-writeboost-target.c	/^static void read_cache_cancel_background(struct read_cache_cells *cells)$/;"	f	file:
+read_cache_cancel_cells	dm-writeboost-target.c	/^static void read_cache_cancel_cells(struct read_cache_cells *cells, u32 n)$/;"	f	file:
+read_cache_cancel_foreground	dm-writeboost-target.c	/^static void read_cache_cancel_foreground(struct read_cache_cells *cells,$/;"	f	file:
+read_cache_cell	dm-writeboost.h	/^struct read_cache_cell {$/;"	s
+read_cache_cell_copy_data	dm-writeboost-target.c	/^static void read_cache_cell_copy_data(struct wb_device *wb, struct bio *bio, unsigned long error)$/;"	f	file:
+read_cache_cell_from_node	dm-writeboost-target.c	707;"	d	file:
+read_cache_cells	dm-writeboost.h	/^	struct read_cache_cells *read_cache_cells;$/;"	m	struct:wb_device	typeref:struct:wb_device::read_cache_cells
+read_cache_cells	dm-writeboost.h	/^struct read_cache_cells {$/;"	s
+read_cache_proc	dm-writeboost-target.c	/^static void read_cache_proc(struct work_struct *work)$/;"	f	file:
+read_cache_threshold	dm-writeboost.h	/^	u32 read_cache_threshold; \/* Tunable *\/$/;"	m	struct:wb_device
+read_cache_threshold_saved	dm-writeboost.h	/^	u32 read_cache_threshold_saved;$/;"	m	struct:wb_device
+read_cache_work	dm-writeboost.h	/^	struct work_struct read_cache_work;$/;"	m	struct:wb_device	typeref:struct:wb_device::work_struct
+read_mb	dm-writeboost-target.c	/^static void *read_mb(struct wb_device *wb, struct segment_header *seg,$/;"	f	file:
+read_mb_dirtiness	dm-writeboost-target.c	/^struct dirtiness read_mb_dirtiness(struct wb_device *wb, struct segment_header *seg,$/;"	f
+read_segment_header	dm-writeboost-metadata.c	/^static int read_segment_header(void *buf, struct wb_device *wb,$/;"	f	file:
+read_superblock_header	dm-writeboost-metadata.c	/^static int read_superblock_header(struct superblock_header_device *sup,$/;"	f	file:
+read_superblock_record	dm-writeboost-metadata.c	/^static int read_superblock_record(struct superblock_record_device *record,$/;"	f	file:
+read_whole_segment	dm-writeboost-metadata.c	/^static int read_whole_segment(void *buf, struct wb_device *wb,$/;"	f	file:
+recover_cache	dm-writeboost-metadata.c	/^static int recover_cache(struct wb_device *wb)$/;"	f	file:
+ref_buffered_mb	dm-writeboost-target.c	/^static void *ref_buffered_mb(struct wb_device *wb, struct metablock *mb)$/;"	f	file:
+regions	dm-writeboost-target.c	/^	struct dm_io_region *regions;$/;"	m	struct:wb_io	typeref:struct:wb_io::dm_io_region	file:
+reinit_read_cache_cells	dm-writeboost-target.c	/^static void reinit_read_cache_cells(struct wb_device *wb)$/;"	f	file:
+replay_log_on_cache	dm-writeboost-metadata.c	/^static int replay_log_on_cache(struct wb_device *wb)$/;"	f	file:
+req_is_write	dm-writeboost.h	513;"	d
+req_is_write	dm-writeboost.h	520;"	d
+reserve_read_cache_cell	dm-writeboost-target.c	/^static bool reserve_read_cache_cell(struct wb_device *wb, struct bio *bio)$/;"	f	file:
+restore_arg	dm-writeboost-target.c	1754;"	d	file:
+resume_cache	dm-writeboost-metadata.c	/^int resume_cache(struct wb_device *wb)$/;"	f
+save_arg	dm-writeboost-target.c	1753;"	d	file:
+sb_record_updater	dm-writeboost.h	/^	struct task_struct *sb_record_updater;$/;"	m	struct:wb_device	typeref:struct:wb_device::task_struct
+sb_record_updater_proc	dm-writeboost-daemon.c	/^int sb_record_updater_proc(void *data)$/;"	f
+sector	dm-writeboost-metadata.h	/^	sector_t sector;$/;"	m	struct:lookup_key
+sector	dm-writeboost.h	/^	__le64 sector;$/;"	m	struct:metablock_device
+sector	dm-writeboost.h	/^	sector_t sector; \/* Key *\/$/;"	m	struct:writeback_io
+sector	dm-writeboost.h	/^	sector_t sector; \/* The original aligned address *\/$/;"	m	struct:metablock
+sector	dm-writeboost.h	/^	sector_t sector;$/;"	m	struct:read_cache_cell
+seg	dm-writeboost-target.c	/^		struct segment_header *seg;$/;"	m	union:per_bio_data::__anon1	typeref:struct:per_bio_data::__anon1::segment_header	file:
+seg	dm-writeboost.h	/^	struct segment_header *seg; \/* Segment to write back *\/$/;"	m	struct:writeback_segment	typeref:struct:writeback_segment::segment_header
+seg	dm-writeboost.h	/^	struct segment_header *seg;$/;"	m	struct:rambuffer	typeref:struct:rambuffer::segment_header
+segment_at	dm-writeboost-metadata.c	/^static struct segment_header *segment_at(struct wb_device *wb, u32 k)$/;"	f	file:
+segment_header	dm-writeboost.h	/^struct segment_header {$/;"	s
+segment_header_array	dm-writeboost.h	/^	struct large_array *segment_header_array;$/;"	m	struct:wb_device	typeref:struct:wb_device::large_array
+segment_header_device	dm-writeboost.h	/^struct segment_header_device {$/;"	s
+segment_id_to_idx	dm-writeboost-metadata.c	/^static u32 segment_id_to_idx(struct wb_device *wb, u64 id)$/;"	f	file:
+seqcount	dm-writeboost.h	/^	u32 seqcount;$/;"	m	struct:read_cache_cells
+should_flush	dm-writeboost-daemon.c	/^static bool should_flush(struct wb_device *wb)$/;"	f	file:
+should_writeback	dm-writeboost-daemon.c	/^static bool should_writeback(struct wb_device *wb)$/;"	f	file:
+size	dm-writeboost.h	/^	u32 size;$/;"	m	struct:read_cache_cells
+start_idx	dm-writeboost.h	/^	u32 start_idx; \/* Const *\/$/;"	m	struct:segment_header
+start_sector	dm-writeboost.h	/^	sector_t start_sector; \/* Const *\/$/;"	m	struct:segment_header
+stat	dm-writeboost.h	/^	atomic64_t stat[STATLEN];$/;"	m	struct:wb_device
+submit_writeback_io	dm-writeboost-daemon.c	/^static void submit_writeback_io(struct wb_device *wb, struct writeback_io *writeback_io)$/;"	f	file:
+submit_writeback_ios	dm-writeboost-daemon.c	/^static void submit_writeback_ios(struct wb_device *wb)$/;"	f	file:
+superblock_header_device	dm-writeboost.h	/^struct superblock_header_device {$/;"	s
+superblock_record_device	dm-writeboost.h	/^struct superblock_record_device {$/;"	s
+sync_data_interval	dm-writeboost.h	/^	unsigned long sync_data_interval; \/* Tunable *\/$/;"	m	struct:wb_device
+sync_data_interval_saved	dm-writeboost.h	/^	unsigned long sync_data_interval_saved;$/;"	m	struct:wb_device
+taint_mb	dm-writeboost-target.c	/^static bool taint_mb(struct wb_device *wb, struct metablock *mb, u8 data_bits)$/;"	f	file:
+threshold	dm-writeboost.h	/^	u32 threshold;$/;"	m	struct:read_cache_cells
+ti	dm-writeboost.h	/^	struct dm_target *ti;$/;"	m	struct:wb_device	typeref:struct:wb_device::dm_target
+to_mask	dm-writeboost-target.c	/^static u8 to_mask(u8 offset, u8 count)$/;"	f	file:
+try_alloc_writeback_ios	dm-writeboost-metadata.c	/^int try_alloc_writeback_ios(struct wb_device *wb, size_t nr_batch, gfp_t gfp)$/;"	f
+try_writeback_segs	dm-writeboost-daemon.c	/^static bool try_writeback_segs(struct wb_device *wb)$/;"	f	file:
+type	dm-writeboost-target.c	/^	enum PBD_FLAG type;$/;"	m	struct:per_bio_data	typeref:enum:per_bio_data::PBD_FLAG	file:
+update_nr_empty_segs	dm-writeboost-daemon.c	/^void update_nr_empty_segs(struct wb_device *wb)$/;"	f
+update_sb_record_interval	dm-writeboost.h	/^	unsigned long update_sb_record_interval; \/* Tunable *\/$/;"	m	struct:wb_device
+update_sb_record_interval_saved	dm-writeboost.h	/^	unsigned long update_sb_record_interval_saved;$/;"	m	struct:wb_device
+update_superblock_record	dm-writeboost-daemon.c	/^static void update_superblock_record(struct wb_device *wb)$/;"	f	file:
+urge_writeback	dm-writeboost.h	/^	int urge_writeback; \/* Start writeback immediately *\/$/;"	m	struct:wb_device
+visit_and_cancel_cells	dm-writeboost-target.c	/^static void visit_and_cancel_cells(struct rb_node *first, struct rb_node *last)$/;"	f	file:
+wait_drop_caches	dm-writeboost.h	/^	wait_queue_head_t wait_drop_caches;$/;"	m	struct:wb_device
+wait_for_flushing	dm-writeboost-daemon.c	/^void wait_for_flushing(struct wb_device *wb, u64 id)$/;"	f
+wait_for_writeback	dm-writeboost-daemon.c	/^void wait_for_writeback(struct wb_device *wb, u64 id)$/;"	f
+wake_up_active_wq	dm-writeboost-target.c	/^static void wake_up_active_wq(wait_queue_head_t *wq)$/;"	f	file:
+wb	dm-writeboost-target.c	/^	struct wb_device *wb;$/;"	m	struct:read_backing_async_context	typeref:struct:read_backing_async_context::wb_device	file:
+wb_device	dm-writeboost.h	/^struct wb_device {$/;"	s
+wb_io	dm-writeboost-target.c	/^struct wb_io {$/;"	s	file:
+wb_io	dm-writeboost.h	501;"	d
+wb_io_fn	dm-writeboost-target.c	/^static void wb_io_fn(struct work_struct *work)$/;"	f	file:
+wb_io_internal	dm-writeboost-target.c	/^int wb_io_internal(struct wb_device *wb, struct dm_io_request *io_req,$/;"	f
+work	dm-writeboost-target.c	/^	struct work_struct work;$/;"	m	struct:wb_io	typeref:struct:wb_io::work_struct	file:
+wq	dm-writeboost.h	/^	struct workqueue_struct *wq;$/;"	m	struct:read_cache_cells	typeref:struct:read_cache_cells::workqueue_struct
+write_around_mode	dm-writeboost.h	/^	bool write_around_mode;$/;"	m	struct:wb_device
+write_io	dm-writeboost.h	/^struct write_io {$/;"	s
+write_on_rambuffer	dm-writeboost-target.c	/^static void write_on_rambuffer(struct wb_device *wb, struct metablock *write_pos, struct write_io *wio)$/;"	f	file:
+writeback_daemon	dm-writeboost.h	/^	struct task_struct *writeback_daemon;$/;"	m	struct:wb_device	typeref:struct:wb_device::task_struct
+writeback_daemon_proc	dm-writeboost-daemon.c	/^int writeback_daemon_proc(void *data)$/;"	f
+writeback_endio	dm-writeboost-daemon.c	/^static void writeback_endio(unsigned long error, void *context)$/;"	f	file:
+writeback_fail_count	dm-writeboost.h	/^	atomic_t writeback_fail_count;$/;"	m	struct:wb_device
+writeback_io	dm-writeboost.h	/^struct writeback_io {$/;"	s
+writeback_io_count	dm-writeboost.h	/^	atomic_t writeback_io_count;$/;"	m	struct:wb_device
+writeback_io_from_node	dm-writeboost.h	194;"	d
+writeback_io_wait_queue	dm-writeboost.h	/^	wait_queue_head_t writeback_io_wait_queue;$/;"	m	struct:wb_device
+writeback_modulator	dm-writeboost.h	/^	struct task_struct *writeback_modulator;$/;"	m	struct:wb_device	typeref:struct:wb_device::task_struct
+writeback_modulator_proc	dm-writeboost-daemon.c	/^int writeback_modulator_proc(void *data)$/;"	f
+writeback_segment	dm-writeboost.h	/^struct writeback_segment {$/;"	s
+writeback_segs	dm-writeboost.h	/^	struct writeback_segment **writeback_segs;$/;"	m	struct:wb_device	typeref:struct:wb_device::writeback_segment
+writeback_threshold	dm-writeboost.h	/^	u8 writeback_threshold; \/* Tunable *\/$/;"	m	struct:wb_device
+writeback_threshold_saved	dm-writeboost.h	/^	u8 writeback_threshold_saved;$/;"	m	struct:wb_device
+writeback_tree	dm-writeboost.h	/^	struct rb_root writeback_tree;$/;"	m	struct:wb_device	typeref:struct:wb_device::rb_root
+writeback_wait_queue	dm-writeboost.h	/^	wait_queue_head_t writeback_wait_queue;$/;"	m	struct:wb_device
+writeboost_ctr	dm-writeboost-target.c	/^static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)$/;"	f	file:
+writeboost_dtr	dm-writeboost-target.c	/^static void writeboost_dtr(struct dm_target *ti)$/;"	f	file:
+writeboost_end_io	dm-writeboost-target.c	/^static int writeboost_end_io(struct dm_target *ti, struct bio *bio, blk_status_t *error)$/;"	f	file:
+writeboost_io_hints	dm-writeboost-target.c	/^static void writeboost_io_hints(struct dm_target *ti, struct queue_limits *limits)$/;"	f	file:
+writeboost_iterate_devices	dm-writeboost-target.c	/^static int writeboost_iterate_devices(struct dm_target *ti,$/;"	f	file:
+writeboost_map	dm-writeboost-target.c	/^static int writeboost_map(struct dm_target *ti, struct bio *bio)$/;"	f	file:
+writeboost_message	dm-writeboost-target.c	/^static int writeboost_message(struct dm_target *ti, unsigned argc, char **argv)$/;"	f	file:
+writeboost_module_exit	dm-writeboost-target.c	/^module_exit(writeboost_module_exit);$/;"	v
+writeboost_module_exit	dm-writeboost-target.c	/^static void __exit writeboost_module_exit(void)$/;"	f	file:
+writeboost_module_init	dm-writeboost-target.c	/^module_init(writeboost_module_init);$/;"	v
+writeboost_module_init	dm-writeboost-target.c	/^static int __init writeboost_module_init(void)$/;"	f	file:
+writeboost_postsuspend	dm-writeboost-target.c	/^static void writeboost_postsuspend(struct dm_target *ti)$/;"	f	file:
+writeboost_status	dm-writeboost-target.c	/^static void writeboost_status(struct dm_target *ti, status_type_t type,$/;"	f	file:
+writeboost_target	dm-writeboost-target.c	/^static struct target_type writeboost_target = {$/;"	v	typeref:struct:target_type	file:
+zeroing_complete	dm-writeboost-metadata.c	/^static void zeroing_complete(int read_err, unsigned long write_err, void *context)$/;"	f	file:
+zeroing_context	dm-writeboost-metadata.c	/^struct zeroing_context {$/;"	s	file:
+zeroing_full_superblock	dm-writeboost-metadata.c	/^static int zeroing_full_superblock(struct wb_device *wb)$/;"	f	file:

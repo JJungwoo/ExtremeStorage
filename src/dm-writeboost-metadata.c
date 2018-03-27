@@ -37,6 +37,7 @@ static struct large_array *large_array_alloc(u32 elemsize, u64 nr_elems)
 		return NULL;
 	}
 
+	//(jjo) elemsize는 하나의 요소의 크기, nr_elems는 요소의 개수.
 	arr->elemsize = elemsize;
 	arr->nr_elems = nr_elems;
 
@@ -61,6 +62,7 @@ static void large_array_free(struct large_array *arr)
 
 static void *large_array_at(struct large_array *arr, u64 i)
 {
+	//printk("large_array_at= data: %llu, elemsize: %lu, i: %llu\n",arr->data,arr->elemsize,i);
 	return arr->data + arr->elemsize * i;
 }
 
@@ -107,9 +109,12 @@ static u32 calc_nr_segments(struct dm_dev *dev, struct wb_device *wb)
 /*
  * Get the relative index in a segment of the mb_idx-th metablock
  */
+//512KB의 세그먼트에서 실제 데이터들을 나타내기 위해 127에서 mb_idx값을 나머지 연산하여
+//상127%mb_idx 로 127개의 메타블럭들에서 상대적인 위치를 찾을 수 있다.
 u8 mb_idx_inseg(struct wb_device *wb, u32 mb_idx)
 {
 	u32 tmp32;
+	// nr_caches_inseg: 127
 	div_u64_rem(mb_idx, wb->nr_caches_inseg, &tmp32);
 	return tmp32;
 }
@@ -216,19 +221,20 @@ static int ht_empty_init(struct wb_device *wb)
 	size_t i, nr_heads;
 	struct large_array *arr;
 
-	wb->htsize = wb->nr_caches;
-	nr_heads = wb->htsize + 1;
-	arr = large_array_alloc(sizeof(struct ht_head), nr_heads);
+	wb->htsize = wb->nr_caches;	//(jjo)ht의 전체 개수를 나타냄.
+	nr_heads = wb->htsize + 1; //ht 전체 개수 +1 해서 전체 ht head 개수
+	arr = large_array_alloc(sizeof(struct ht_head), nr_heads); //ht_head 크기 * nr_heads개수 = 총 크기.
 	if (!arr) {
 		DMERR("Failed to allocate htable");
 		return -ENOMEM;
 	}
 
+	//(jjo)large_array 배열으로 htable이 구성되어 있음.
 	wb->htable = arr;
 
 	for (i = 0; i < nr_heads; i++) {
 		struct ht_head *hd = large_array_at(arr, i);
-		INIT_HLIST_HEAD(&hd->ht_list);
+		INIT_HLIST_HEAD(&hd->ht_list); //ht_list 초기화.
 	}
 
 	wb->null_head = large_array_at(wb->htable, wb->htsize);
@@ -236,6 +242,7 @@ static int ht_empty_init(struct wb_device *wb)
 	for (idx = 0; idx < wb->nr_caches; idx++) {
 		struct metablock *mb = mb_at(wb, idx);
 		hlist_add_head(&mb->ht_list, &wb->null_head->ht_list);
+		//(jjo) 
 	}
 
 	return 0;
@@ -249,6 +256,7 @@ static void free_ht(struct wb_device *wb)
 struct ht_head *ht_get_head(struct wb_device *wb, struct lookup_key *key)
 {
 	u32 idx;
+	//printk("ht_get_head= sector: %llu, htsize: %llu, idx: %llu\n",key->sector,wb->htsize,idx);
 	div_u64_rem(key->sector >> 3, wb->htsize, &idx);
 	return large_array_at(wb->htable, idx);
 }
@@ -285,7 +293,8 @@ struct metablock *ht_lookup(struct wb_device *wb, struct ht_head *head,
 			    struct lookup_key *key)
 {
 	struct metablock *mb, *found = NULL;
-	hlist_for_each_entry(mb, &head->ht_list, ht_list) {
+	//(jjo)ht_list에서 mb를 loop cursor로 설정하여 ht_list를 순회하면서 key값과 비교하여 원하는 데이터를 찾는다.
+	hlist_for_each_entry(mb, &head->ht_list, ht_list) { 
 		if (mb_hit(mb, key)) {
 			found = mb;
 			break;
@@ -1235,7 +1244,11 @@ static int init_writeback_daemon(struct wb_device *wb)
 	atomic_set(&wb->writeback_fail_count, 0);
 	atomic_set(&wb->writeback_io_count, 0);
 
-	nr_batch = 32;
+	//nr_batch = 8;
+	//nr_batch = 32;
+	nr_batch = 4096; 
+	//(jjo) 최대 writeback 처리 가능한 세그먼트 개수. 
+	//나중에 dmsetup message 를 사용하여 변경가능하다.
 	wb->nr_max_batched_writeback = nr_batch;
 	if (try_alloc_writeback_ios(wb, nr_batch, GFP_KERNEL))
 		return -ENOMEM;

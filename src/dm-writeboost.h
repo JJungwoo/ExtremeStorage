@@ -129,6 +129,7 @@ struct dirtiness {
 };
 
 struct metablock {
+	// 실제 metablock이 backing device에 기록되야하는 sector 위치.
 	sector_t sector; /* The original aligned address */
 
 	u32 idx; /* Const. Index in the metablock array */
@@ -312,6 +313,7 @@ struct wb_device {
 	/*
 	 * Our hashtable has one special bucket called null head.
 	 * Orphan metablocks are linked to the null head.
+	 * (jjo)고아 메타 블록은 null 헤더에 연결됨..
 	 */
 	struct ht_head *null_head;
 
@@ -459,6 +461,12 @@ struct wb_device {
 	/*--------------------------------------------------------------------*/
 
 	unsigned long flags;
+	
+	/*----------------------------------------------------------------*/
+	// adaptive write mode active status.
+	
+	bool adaptive_write_mode;
+	bool adaptive_write_mode_saved;
 };
 
 /*----------------------------------------------------------------------------*/
