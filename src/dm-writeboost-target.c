@@ -1897,8 +1897,16 @@ static int writeboost_message(struct dm_target *ti, unsigned argc, char **argv)
 		wb->force_drop = false;
 		return err;
 	}
-	
-	printk("write_mode str: %s, value:%d\n",argv[0],argv[1]);
+
+	if(!strcasecmp(argv[0], "write_around_mode_true")) {
+		wb->write_around_mode = true;
+		return 0;
+	}
+
+	if(!strcasecmp(argv[0], "write_around_mode_false")) {
+		wb->write_around_mode = false;
+		return 0;
+	}
 	
 	if (!strcasecmp(argv[0], "adaptive_write_mode_true")) {
 		wb->adaptive_write_mode = true;
@@ -1982,6 +1990,8 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 			   wb->nr_empty_segs);
 		DMEMIT(" nr_read_cache_cells: %u\n",
 			   wb->nr_read_cache_cells);
+		DMEMIT(" write_around_mode: %u\n",
+			   wb->write_around_mode);
 		DMEMIT(" adaptive_write_mode: %u\n",
 			   wb->adaptive_write_mode);
 		break;

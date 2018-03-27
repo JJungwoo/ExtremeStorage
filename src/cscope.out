@@ -1,4 +1,4 @@
-cscope 15 /home/hanyang/dm-writeboost/src               0000095846
+cscope 15 /home/hanyang/extreme-cache/src               0000097109
 	@dm-writeboost-daemon.c
 
 20 
@@ -24,10 +24,6 @@ dm_deviû
  *
 wb
 , 
-¿mbufãr
- *
-¿mbuf
-, 
 £gm’t_h—d”
  *
 £g
@@ -37,31 +33,49 @@ wb
 u8
  
 i
-, 
-£qu’tŸl_couÁ
  = 0;
 
 36 
 u64
  
-‹mp_£ùÜ
+´ev_£ùÜ
  = 0;
 
-37 
+37 
+£qu’tŸl_couÁ
+ = 0;
+
+38 
 m‘ablock
  *
 mb
 ;
 
-38 
+39 
+´ev_£ùÜ
+ = 
+mb
+->
+£ùÜ
+;
+
+40 
+	`´štk
+("check_io_·‰”n(èËngth: %Îu\n",
+£g
+->
+Ëngth
+);
+
+41 
 i
- = 0; i < 
+ = 1; i < 
 £g
 ->
 Ëngth
 ; i++) {
 
-39 
+42 
 mb
  = 
 £g
@@ -71,63 +85,323 @@ mb_¬¿y
 i
 ;
 
-40 if(0 =ð
-i
- && 0 =ð
-‹mp_£ùÜ
-)
-
-41 
-‹mp_£ùÜ
- = 
-mb
-->
-£ùÜ
-;
-
-42 if(
-‹mp_£ùÜ
+43 if(
+´ev_£ùÜ
  =ð
 mb
 ->
 £ùÜ
  - 8)
 
-43 
+44 
 £qu’tŸl_couÁ
 ++;
 
-45 
+46 
 £qu’tŸl_couÁ
 --;
 
-46 
-‹mp_£ùÜ
+47 
+	`´štk
+("£qu’tŸl_couÁ: %d, seùÜ: %Îu \n",
+£qu’tŸl_couÁ
+, 
+mb
+->
+£ùÜ
+);
+
+48 
+´ev_£ùÜ
  = 
 mb
 ->
 £ùÜ
 ;
 
-49 
-	`´štk
-("check_io_·‰”n(): seq_couÁ: %u\n",
-£qu’tŸl_couÁ
-);
-
-51 if(0 > 
+54 if(100 > 
 £qu’tŸl_couÁ
 )
 
-53  
+56  
 £qu’tŸl_couÁ
 ;
 
-54 
+57 
 	}
 }
 
-58 
+65 
+	$£gm’t_wr™e_through
+(
+dm_deviû
+ *
+wb
+, 
+¿mbufãr
+ *
+¿mbuf
+, 
+£gm’t_h—d”
+ *
+£g
+)
+
+67 
+u8
+ 
+i
+, 
+j
+;
+
+68 
+m‘ablock
+ *
+mb
+;
+
+69 
+i
+ = 0; i < 
+£g
+->
+Ëngth
+; i++) {
+
+70 
+mb
+ = 
+£g
+->
+mb_¬¿y
+ + 
+i
+;
+
+71 if(
+mb
+->
+dœtšess
+->
+d©a_b™s
+ == 255) {
+
+72 
+dm_io_»que¡
+ 
+io_»q
+ = {
+
+73 
+WB_IO_WRITE
+,
+
+74 .
+þ›Á
+ = 
+wb
+->
+io_þ›Á
+,
+
+75 .
+nÙify
+.
+â
+ = 
+NULL
+,
+
+76 .
+mem
+.
+ty³
+ = 
+DM_IO_VMA
+,
+
+77 .
+mem
+.
+±r
+.
+addr
+ = 
+¿mbuf
+->
+d©a
+,
+
+79 
+dm_io_»giÚ
+ 
+»giÚ
+ = {
+
+80 .
+bdev
+ = 
+wb
+->
+backšg_dev
+->bdev,
+
+81 .
+£ùÜ
+ = 
+mb
+->sector,
+
+82 .
+couÁ
+ = 1 << 3,
+
+84 ià(
+	`wb_io
+(&
+io_»q
+, 1, &
+»giÚ
+, 
+NULL
+, 
+çl£
+)) {
+
+85 
+	`´štk
+("segment_write_throghƒrror..\n");
+
+89 
+j
+ = 0; j < 8; j++) {
+
+90 
+dm_io_»que¡
+ 
+io_»q
+;
+
+91 
+dm_io_»giÚ
+ 
+»giÚ
+;
+
+93 
+boÞ
+ 
+b™_Ú
+ = 
+mb
+->
+dœtšess
+->
+d©a_b™s
+ & (1 << 
+i
+);
+
+94 ià(!
+b™_Ú
+)
+
+97 
+io_»q
+ = (
+dm_io_»que¡
+) {
+
+98 
+WB_IO_WRITE
+,
+
+99 .
+þ›Á
+ = 
+wb
+->
+io_þ›Á
+,
+
+100 .
+nÙify
+.
+â
+ = 
+NULL
+,
+
+101 .
+mem
+.
+ty³
+ = 
+DM_IO_VMA
+,
+
+102 .
+mem
+.
+±r
+.
+addr
+ = 
+¿mbuf
+->
+d©a
+ + (
+i
+ << 9),
+
+104 
+»giÚ
+ = (
+dm_io_»giÚ
+) {
+
+105 .
+bdev
+ = 
+wb
+->
+backšg_dev
+->bdev,
+
+106 .
+£ùÜ
+ = 
+mb
+->£ùÜ + 
+i
+,
+
+107 .
+couÁ
+ = 1,
+
+109 ià(
+	`wb_io
+(&
+io_»q
+, 1, &
+»giÚ
+, 
+NULL
+, 
+çl£
+)) {
+
+110 
+	`´štk
+("segment_write_throghƒrror..\n");
+
+116 
+	}
+}
+
+120 
 	$queue_b¬r›r_io
 (
 wb_deviû
@@ -137,7 +411,7 @@ wb
 bio
  *bio)
 
-60 
+122 
 	`mu‹x_lock
 (&
 wb
@@ -145,7 +419,7 @@ wb
 io_lock
 );
 
-61 
+123 
 	`bio_li¡_add
 (&
 wb
@@ -155,7 +429,7 @@ b¬r›r_ios
 bio
 );
 
-62 
+124 
 	`mu‹x_uÆock
 (&
 wb
@@ -163,7 +437,7 @@ wb
 io_lock
 );
 
-68 
+130 
 	`queue_wÜk
 (
 wb
@@ -173,11 +447,11 @@ b¬r›r_wq
 æush_b¬r›r_wÜk
 );
 
-69 
+131 
 	}
 }
 
-71 
+133 
 	$æush_b¬r›r_ios
 (
 wÜk_¡ruù
@@ -185,7 +459,7 @@ wÜk_¡ruù
 wÜk
 )
 
-73 
+135 
 wb_deviû
  *
 wb
@@ -193,7 +467,7 @@ wb
 	`cÚš”_of
 (
 
-74 
+136 
 wÜk
 , 
 wb_deviû
@@ -201,7 +475,7 @@ wb_deviû
 æush_b¬r›r_wÜk
 );
 
-76 ià(
+138 ià(
 	`bio_li¡_em±y
 (&
 wb
@@ -209,7 +483,7 @@ wb
 b¬r›r_ios
 ))
 
-79 
+141 
 	`©omic64_šc
 (&
 wb
@@ -217,17 +491,17 @@ wb
 couÁ_nÚ_fuÎ_æushed
 );
 
-80 
+142 
 	`æush_cu¼’t_bufãr
 (
 wb
 );
 
-81 
+143 
 	}
 }
 
-85 
+147 
 	$´oûss_deã¼ed_b¬r›rs
 (
 wb_deviû
@@ -239,7 +513,7 @@ wb
 ¿mbuf
 )
 
-87 
+149 
 boÞ
  
 has_b¬r›r
@@ -251,15 +525,15 @@ has_b¬r›r
 b¬r›r_ios
 );
 
-88 ià(
+150 ià(
 has_b¬r›r
 ) {
 
-89 
+151 
 bio
  *bio;
 
-92 
+154 
 ”r
  = 
 	`blkdev_issue_æush
@@ -275,7 +549,7 @@ GFP_NOIO
 NULL
 );
 
-95 (
+157 (
 bio
  = 
 	`bio_li¡_pÝ
@@ -285,29 +559,29 @@ bio
 b¬r›r_ios
 )))
 
-103 ià(
+165 ià(
 	`uÆik–y
 (
 ”r
 ))
 
-104 
+166 
 	`bio_io_”rÜ
 (
 bio
 );
 
-106 
+168 
 	`bio_io_sucûss_com·t
 (
 bio
 );
 
-108 
+170 
 	}
 }
 
-110 
+172 
 boÞ
  
 	$should_æush
@@ -317,7 +591,7 @@ wb_deviû
 wb
 )
 
-112  
+174  
 	`©omic64_»ad
 (&
 wb
@@ -325,7 +599,7 @@ wb
 Ï¡_queued_£gm’t_id
 ) >
 
-113 
+175 
 	`©omic64_»ad
 (&
 wb
@@ -333,11 +607,11 @@ wb
 Ï¡_æushed_£gm’t_id
 );
 
-114 
+176 
 	}
 }
 
-116 
+178 
 	$do_æush_´oc
 (
 wb_deviû
@@ -345,49 +619,49 @@ wb_deviû
 wb
 )
 
-118 
+180 
 £gm’t_h—d”
  *
 £g
 ;
 
-119 
+181 
 ¿mbufãr
  *
 ¿mbuf
 ;
 
-120 
+182 
 u64
  
 id
 ;
 
-121 
+183 
 dm_io_»que¡
  
 io_»q
 ;
 
-122 
+184 
 dm_io_»giÚ
  
 »giÚ
 ;
 
-124 ià(!
+186 ià(!
 	`should_æush
 (
 wb
 )) {
 
-125 
+187 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
 (1000));
 
-129 
+191 
 id
  = 
 	`©omic64_»ad
@@ -397,11 +671,11 @@ wb
 Ï¡_æushed_£gm’t_id
 ) + 1;
 
-131 
+193 
 	`smp_rmb
 ();
 
-133 
+195 
 ¿mbuf
  = 
 	`g‘_¿mbufãr_by_id
@@ -411,18 +685,16 @@ wb
 id
 );
 
-134 
+196 
 £g
  = 
 ¿mbuf
 ->seg;
 
-138 if(
+200 if(
 	`check_io_·‰”n
 (
 wb
-, 
-¿mbuf
 , 
 £g
 è&& (
@@ -431,17 +703,27 @@ wb
 ad­tive_wr™e_mode
 )) {
 
-139 
+201 
+	`£gm’t_wr™e_through
+(
+wb
+, 
+¿mbuf
+, 
+£g
+);
+
+203 
 io_»q
  = (
 dm_io_»que¡
 ) {
 
-140 
+204 
 WB_IO_WRITE
 ,
 
-141 .
+205 .
 þ›Á
  = 
 wb
@@ -449,7 +731,7 @@ wb
 io_þ›Á
 ,
 
-142 .
+206 .
 nÙify
 .
 â
@@ -457,7 +739,7 @@ nÙify
 NULL
 ,
 
-143 .
+207 .
 mem
 .
 ty³
@@ -465,7 +747,7 @@ ty³
 DM_IO_VMA
 ,
 
-144 .
+208 .
 mem
 .
 ±r
@@ -477,89 +759,13 @@ addr
 d©a
 ,
 
-146 
+210 
 »giÚ
  = (
 dm_io_»giÚ
 ) {
 
-147 .
-bdev
- = 
-wb
-->
-backšg_dev
-->bdev,
-
-148 .
-£ùÜ
- = 
-£g
-->
-¡¬t_£ùÜ
-,
-
-149 .
-couÁ
- = (
-£g
-->
-Ëngth
- + 1) << 3,
-
-152 
-io_»q
- = (
-dm_io_»que¡
-) {
-
-153 
-WB_IO_WRITE
-,
-
-154 .
-þ›Á
- = 
-wb
-->
-io_þ›Á
-,
-
-155 .
-nÙify
-.
-â
- = 
-NULL
-,
-
-156 .
-mem
-.
-ty³
- = 
-DM_IO_VMA
-,
-
-157 .
-mem
-.
-±r
-.
-addr
- = 
-¿mbuf
-->
-d©a
-,
-
-159 
-»giÚ
- = (
-dm_io_»giÚ
-) {
-
-160 .
+211 .
 bdev
  = 
 wb
@@ -567,7 +773,7 @@ wb
 ÿche_dev
 ->bdev,
 
-161 .
+212 .
 £ùÜ
  = 
 £g
@@ -575,7 +781,7 @@ wb
 ¡¬t_£ùÜ
 ,
 
-162 .
+213 .
 couÁ
  = (
 £g
@@ -583,7 +789,7 @@ couÁ
 Ëngth
  + 1) << 3,
 
-166 ià(
+215 ià(
 	`wb_io
 (&
 io_»q
@@ -595,7 +801,7 @@ NULL
 çl£
 ))
 
-174 
+228 
 	`´oûss_deã¼ed_b¬r›rs
 (
 wb
@@ -603,11 +809,11 @@ wb
 ¿mbuf
 );
 
-180 
+234 
 	`smp_wmb
 ();
 
-181 
+235 
 	`©omic64_šc
 (&
 wb
@@ -615,7 +821,7 @@ wb
 Ï¡_æushed_£gm’t_id
 );
 
-182 
+236 
 	`wake_up
 (&
 wb
@@ -623,17 +829,17 @@ wb
 æush_wa™_queue
 );
 
-183 
+237 
 	}
 }
 
-185 
+239 
 	$æush_d«mÚ_´oc
 (*
 d©a
 )
 
-187 
+241 
 wb_deviû
  *
 wb
@@ -641,21 +847,21 @@ wb
 d©a
 ;
 
-188 !
+242 !
 	`kth»ad_should_¡Ý
 ())
 
-189 
+243 
 	`do_æush_´oc
 (
 wb
 );
 
-191 
+245 
 	}
 }
 
-193 
+247 
 	$wa™_fÜ_æushšg
 (
 wb_deviû
@@ -667,7 +873,7 @@ u64
 id
 )
 
-195 
+249 
 	`wa™_ev’t
 (
 wb
@@ -675,7 +881,7 @@ wb
 æush_wa™_queue
 ,
 
-196 
+250 
 	`©omic64_»ad
 (&
 wb
@@ -685,15 +891,15 @@ wb
 id
 );
 
-197 
+251 
 	`smp_rmb
 ();
 
-198 
+252 
 	}
 }
 
-202 
+256 
 	$wr™eback_’dio
 (
 ”rÜ
@@ -701,7 +907,7 @@ id
 cÚ‹xt
 )
 
-204 
+258 
 wb_deviû
  *
 wb
@@ -709,11 +915,11 @@ wb
 cÚ‹xt
 ;
 
-206 ià(
+260 ià(
 ”rÜ
 )
 
-207 
+261 
 	`©omic_šc
 (&
 wb
@@ -721,7 +927,7 @@ wb
 wr™eback_çž_couÁ
 );
 
-209 ià(
+263 ià(
 	`©omic_dec_ªd_‹¡
 (&
 wb
@@ -729,7 +935,7 @@ wb
 wr™eback_io_couÁ
 ))
 
-210 
+264 
 	`wake_up
 (&
 wb
@@ -737,11 +943,11 @@ wb
 wr™eback_io_wa™_queue
 );
 
-211 
+265 
 	}
 }
 
-213 
+267 
 	$subm™_wr™eback_io
 (
 wb_deviû
@@ -751,7 +957,7 @@ wb
 wr™eback_io
  *writeback_io)
 
-215 
+269 
 	`ASSERT
 (
 wr™eback_io
@@ -759,23 +965,23 @@ wr™eback_io
 d©a_b™s
  > 0);
 
-217 ià(
+271 ià(
 wr™eback_io
 ->
 d©a_b™s
  == 255) {
 
-218 
+272 
 dm_io_»que¡
  
 io_»q_w
  = {
 
-219 
+273 
 WB_IO_WRITE
 ,
 
-220 .
+274 .
 þ›Á
  = 
 wb
@@ -783,7 +989,7 @@ wb
 io_þ›Á
 ,
 
-221 .
+275 .
 nÙify
 .
 â
@@ -791,7 +997,7 @@ nÙify
 wr™eback_’dio
 ,
 
-222 .
+276 .
 nÙify
 .
 cÚ‹xt
@@ -799,7 +1005,7 @@ cÚ‹xt
 wb
 ,
 
-223 .
+277 .
 mem
 .
 ty³
@@ -807,7 +1013,7 @@ ty³
 DM_IO_VMA
 ,
 
-224 .
+278 .
 mem
 .
 ±r
@@ -819,13 +1025,13 @@ wr™eback_io
 d©a
 ,
 
-226 
+280 
 dm_io_»giÚ
  
 »giÚ_w
  = {
 
-227 .
+281 .
 bdev
  = 
 wb
@@ -833,17 +1039,17 @@ wb
 backšg_dev
 ->bdev,
 
-228 .
+282 .
 £ùÜ
  = 
 wr™eback_io
 ->sector,
 
-229 .
+283 .
 couÁ
  = 1 << 3,
 
-231 ià(
+285 ià(
 	`wb_io
 (&
 io_»q_w
@@ -855,35 +1061,35 @@ NULL
 çl£
 ))
 
-232 
+286 
 	`wr™eback_’dio
 (1, 
 wb
 );
 
-234 
+288 
 u8
  
 i
 ;
 
-235 
+289 
 i
  = 0; i < 8; i++) {
 
-236 
+290 
 dm_io_»que¡
  
 io_»q_w
 ;
 
-237 
+291 
 dm_io_»giÚ
  
 »giÚ_w
 ;
 
-239 
+293 
 boÞ
  
 b™_Ú
@@ -895,21 +1101,21 @@ d©a_b™s
 i
 );
 
-240 ià(!
+294 ià(!
 b™_Ú
 )
 
-243 
+297 
 io_»q_w
  = (
 dm_io_»que¡
 ) {
 
-244 
+298 
 WB_IO_WRITE
 ,
 
-245 .
+299 .
 þ›Á
  = 
 wb
@@ -917,7 +1123,7 @@ wb
 io_þ›Á
 ,
 
-246 .
+300 .
 nÙify
 .
 â
@@ -925,7 +1131,7 @@ nÙify
 wr™eback_’dio
 ,
 
-247 .
+301 .
 nÙify
 .
 cÚ‹xt
@@ -933,7 +1139,7 @@ cÚ‹xt
 wb
 ,
 
-248 .
+302 .
 mem
 .
 ty³
@@ -941,7 +1147,7 @@ ty³
 DM_IO_VMA
 ,
 
-249 .
+303 .
 mem
 .
 ±r
@@ -955,13 +1161,13 @@ d©a
 i
  << 9),
 
-251 
+305 
 »giÚ_w
  = (
 dm_io_»giÚ
 ) {
 
-252 .
+306 .
 bdev
  = 
 wb
@@ -969,7 +1175,7 @@ wb
 backšg_dev
 ->bdev,
 
-253 .
+307 .
 £ùÜ
  = 
 wr™eback_io
@@ -977,11 +1183,11 @@ wr™eback_io
 i
 ,
 
-254 .
+308 .
 couÁ
  = 1,
 
-256 ià(
+310 ià(
 	`wb_io
 (&
 io_»q_w
@@ -993,17 +1199,17 @@ NULL
 çl£
 ))
 
-257 
+311 
 	`wr™eback_’dio
 (1, 
 wb
 );
 
-260 
+314 
 	}
 }
 
-262 
+316 
 	$subm™_wr™eback_ios
 (
 wb_deviû
@@ -1011,13 +1217,13 @@ wb_deviû
 wb
 )
 
-264 
+318 
 blk_¶ug
  
 ¶ug
 ;
 
-265 
+319 
 rb_roÙ
  
 wt
@@ -1027,19 +1233,19 @@ wb
 wr™eback_Œ“
 ;
 
-266 
+320 
 	`blk_¡¬t_¶ug
 (&
 ¶ug
 );
 
-267 !
+321 !
 	`RB_EMPTY_ROOT
 (&
 wt
 )) {
 
-268 
+322 
 wr™eback_io
  *wr™eback_iØð
 	`wr™eback_io_äom_node
@@ -1049,7 +1255,7 @@ wr™eback_io
 wt
 ));
 
-269 
+323 
 	`rb_”a£
 (&
 wr™eback_io
@@ -1059,7 +1265,7 @@ rb_node
 wt
 );
 
-270 
+324 
 	`subm™_wr™eback_io
 (
 wb
@@ -1067,17 +1273,17 @@ wb
 wr™eback_io
 );
 
-272 
+326 
 	`blk_fšish_¶ug
 (&
 ¶ug
 );
 
-273 
+327 
 	}
 }
 
-283 
+337 
 boÞ
  
 	$com·»_wr™eback_io
@@ -1089,19 +1295,19 @@ a
 b
 )
 
-285 
+339 
 	`ASSERT
 (
 a
 );
 
-286 
+340 
 	`ASSERT
 (
 b
 );
 
-287 ià(
+341 ià(
 a
 ->
 £ùÜ
@@ -1109,11 +1315,11 @@ a
 b
 ->sector)
 
-288  
+342  
 Œue
 ;
 
-289 ià(
+343 ià(
 a
 ->
 id
@@ -1121,19 +1327,19 @@ id
 b
 ->id)
 
-290  
+344  
 Œue
 ;
 
-291  
+345  
 çl£
 ;
 
-292 
+346 
 	}
 }
 
-294 
+348 
 	$šc_wr™eback_io_couÁ
 (
 u8
@@ -1145,39 +1351,39 @@ size_t
 wr™eback_io_couÁ
 )
 
-296 ià(
+350 ià(
 d©a_b™s
  == 255) {
 
-297 (*
+351 (*
 wr™eback_io_couÁ
 )++;
 
-299 
+353 
 u8
  
 i
 ;
 
-300 
+354 
 i
  = 0; i < 8; i++) {
 
-301 ià(
+355 ià(
 d©a_b™s
  & (1 << 
 i
 ))
 
-302 (*
+356 (*
 wr™eback_io_couÁ
 )++;
 
-305 
+359 
 	}
 }
 
-311 
+365 
 	$add_wr™eback_io
 (
 wb_deviû
@@ -1187,7 +1393,7 @@ wb
 wr™eback_io
  *writeback_io)
 
-313 
+367 
 rb_node
  **
 rbp
@@ -1195,7 +1401,7 @@ rbp
 ·»Á
 ;
 
-314 
+368 
 rbp
  = &
 wb
@@ -1205,29 +1411,29 @@ wr™eback_Œ“
 rb_node
 ;
 
-315 
+369 
 ·»Á
  = 
 NULL
 ;
 
-316 *
+370 *
 rbp
 ) {
 
-317 
+371 
 wr™eback_io
  *
 ·»Á_io
 ;
 
-318 
+372 
 ·»Á
  = *
 rbp
 ;
 
-319 
+373 
 ·»Á_io
  = 
 	`wr™eback_io_äom_node
@@ -1235,7 +1441,7 @@ rbp
 ·»Á
 );
 
-321 ià(
+375 ià(
 	`com·»_wr™eback_io
 (
 wr™eback_io
@@ -1243,19 +1449,19 @@ wr™eback_io
 ·»Á_io
 ))
 
-322 
+376 
 rbp
  = &(*rbp)->
 rb_Ëá
 ;
 
-324 
+378 
 rbp
  = &(*rbp)->
 rb_right
 ;
 
-326 
+380 
 	`rb_lšk_node
 (&
 wr™eback_io
@@ -1267,7 +1473,7 @@ rb_node
 rbp
 );
 
-327 
+381 
 	`rb_š£¹_cÞÜ
 (&
 wr™eback_io
@@ -1279,11 +1485,11 @@ wb
 wr™eback_Œ“
 );
 
-328 
+382 
 	}
 }
 
-330 
+384 
 	$fžl_wr™eback_£g
 (
 wb_deviû
@@ -1295,7 +1501,7 @@ wr™eback_£gm’t
 wr™eback_£g
 )
 
-332 
+386 
 £gm’t_h—d”
  *
 £g
@@ -1303,17 +1509,17 @@ wr™eback_£g
 wr™eback_£g
 ->seg;
 
-334 
+388 
 dm_io_»que¡
  
 io_»q_r
  = {
 
-335 
+389 
 WB_IO_READ
 ,
 
-336 .
+390 .
 þ›Á
  = 
 wb
@@ -1321,7 +1527,7 @@ wb
 io_þ›Á
 ,
 
-337 .
+391 .
 nÙify
 .
 â
@@ -1329,7 +1535,7 @@ nÙify
 NULL
 ,
 
-338 .
+392 .
 mem
 .
 ty³
@@ -1337,7 +1543,7 @@ ty³
 DM_IO_VMA
 ,
 
-339 .
+393 .
 mem
 .
 ±r
@@ -1349,13 +1555,13 @@ wr™eback_£g
 buf
 ,
 
-341 
+395 
 dm_io_»giÚ
  
 »giÚ_r
  = {
 
-342 .
+396 .
 bdev
  = 
 wb
@@ -1363,7 +1569,7 @@ wb
 ÿche_dev
 ->bdev,
 
-343 .
+397 .
 £ùÜ
  = 
 £g
@@ -1371,7 +1577,7 @@ wb
 ¡¬t_£ùÜ
  + (1 << 3),
 
-344 .
+398 .
 couÁ
  = 
 £g
@@ -1379,7 +1585,7 @@ couÁ
 Ëngth
  << 3,
 
-351  
+405  
 	`wb_io
 (&
 io_»q_r
@@ -1391,11 +1597,11 @@ NULL
 çl£
 );
 
-352 
+406 
 	}
 }
 
-354 
+408 
 	$´•¬e_wr™eback_ios
 (
 wb_deviû
@@ -1407,13 +1613,13 @@ wr™eback_£gm’t
 wr™eback_£g
 ,
 
-355 
+409 
 size_t
  *
 wr™eback_io_couÁ
 )
 
-357 
+411 
 £gm’t_h—d”
  *
 £g
@@ -1421,13 +1627,13 @@ wr™eback_io_couÁ
 wr™eback_£g
 ->seg;
 
-359 
+413 
 u8
  
 i
 ;
 
-361 
+415 
 i
  = 0; i < 
 £g
@@ -1435,11 +1641,11 @@ i
 Ëngth
 ; i++) {
 
-362 
+416 
 wr™eback_io
  *writeback_io;
 
-364 
+418 
 m‘ablock
  *
 mb
@@ -1451,7 +1657,7 @@ mb_¬¿y
 i
 ;
 
-365 
+419 
 dœtšess
  dœtšes ð
 	`»ad_mb_dœtšess
@@ -1463,7 +1669,7 @@ wb
 mb
 );
 
-366 
+420 
 	`ASSERT
 (
 dœtšess
@@ -1471,13 +1677,13 @@ dœtšess
 d©a_b™s
  > 0);
 
-368 ià(!
+422 ià(!
 dœtšess
 .
 is_dœty
 )
 
-371 
+425 
 wr™eback_io
  = 
 wr™eback_£g
@@ -1487,7 +1693,7 @@ ios
 i
 ;
 
-372 
+426 
 wr™eback_io
 ->
 £ùÜ
@@ -1495,7 +1701,7 @@ wr™eback_io
 mb
 ->sector;
 
-373 
+427 
 wr™eback_io
 ->
 id
@@ -1503,7 +1709,7 @@ id
 £g
 ->id;
 
-375 
+429 
 wr™eback_io
 ->
 d©a_b™s
@@ -1511,7 +1717,7 @@ d©a_b™s
 dœtšess
 .data_bits;
 
-377 
+431 
 	`šc_wr™eback_io_couÁ
 (
 wr™eback_io
@@ -1521,7 +1727,7 @@ d©a_b™s
 wr™eback_io_couÁ
 );
 
-378 
+432 
 	`add_wr™eback_io
 (
 wb
@@ -1529,11 +1735,11 @@ wb
 wr™eback_io
 );
 
-380 
+434 
 	}
 }
 
-382 
+436 
 	$m¬k_þ—n_£g
 (
 wb_deviû
@@ -1545,13 +1751,13 @@ wb
 £g
 )
 
-384 
+438 
 u8
  
 i
 ;
 
-385 
+439 
 i
  = 0; i < 
 £g
@@ -1559,7 +1765,7 @@ i
 Ëngth
 ; i++) {
 
-386 
+440 
 m‘ablock
  *
 mb
@@ -1571,7 +1777,7 @@ mb_¬¿y
 i
 ;
 
-387 ià(
+441 ià(
 	`m¬k_þ—n_mb
 (
 wb
@@ -1579,17 +1785,17 @@ wb
 mb
 ))
 
-388 
+442 
 	`dec_Ä_dœty_ÿches
 (
 wb
 );
 
-390 
+444 
 	}
 }
 
-395 
+449 
 boÞ
  
 	$Œy_wr™eback_£gs
@@ -1599,25 +1805,25 @@ wb_deviû
 wb
 )
 
-397 
+451 
 wr™eback_£gm’t
  *
 wr™eback_£g
 ;
 
-398 
+452 
 size_t
  
 wr™eback_io_couÁ
  = 0;
 
-399 
+453 
 u32
  
 k
 ;
 
-402 
+456 
 wb
 ->
 wr™eback_Œ“
@@ -1625,7 +1831,7 @@ wr™eback_Œ“
 RB_ROOT
 ;
 
-403 
+457 
 k
  = 0; k < 
 wb
@@ -1633,7 +1839,7 @@ wb
 Ä_cur_b©ched_wr™eback
 ; k++) {
 
-404 
+458 
 wr™eback_£g
  = *(
 wb
@@ -1643,7 +1849,7 @@ wr™eback_£gs
 k
 );
 
-406 ià(
+460 ià(
 	`fžl_wr™eback_£g
 (
 wb
@@ -1651,11 +1857,11 @@ wb
 wr™eback_£g
 ))
 
-407  
+461  
 çl£
 ;
 
-409 
+463 
 	`´•¬e_wr™eback_ios
 (
 wb
@@ -1665,7 +1871,7 @@ wr™eback_£g
 wr™eback_io_couÁ
 );
 
-412 
+466 
 	`©omic_£t
 (&
 wb
@@ -1673,7 +1879,7 @@ wb
 wr™eback_io_couÁ
 , writeback_io_count);
 
-413 
+467 
 	`©omic_£t
 (&
 wb
@@ -1681,13 +1887,13 @@ wb
 wr™eback_çž_couÁ
 , 0);
 
-416 
+470 
 	`subm™_wr™eback_ios
 (
 wb
 );
 
-417 
+471 
 	`wa™_ev’t
 (
 wb
@@ -1699,7 +1905,7 @@ wr™eback_io_wa™_queue
 wr™eback_io_couÁ
 ));
 
-419  
+473  
 	`©omic_»ad
 (&
 wb
@@ -1707,11 +1913,11 @@ wb
 wr™eback_çž_couÁ
 ) == 0;
 
-420 
+474 
 	}
 }
 
-422 
+476 
 boÞ
  
 	$do_wr™eback_£gs
@@ -1721,17 +1927,17 @@ wb_deviû
 wb
 )
 
-424 ià(!
+478 ià(!
 	`Œy_wr™eback_£gs
 (
 wb
 ))
 
-425  
+479  
 çl£
 ;
 
-427 
+481 
 	`blkdev_issue_æush
 (
 wb
@@ -1745,15 +1951,15 @@ GFP_NOIO
 NULL
 );
 
-428  
+482  
 Œue
 ;
 
-429 
+483 
 	}
 }
 
-434 
+488 
 	$upd©e_Ä_em±y_£gs
 (
 wb_deviû
@@ -1761,13 +1967,13 @@ wb_deviû
 wb
 )
 
-437 
+491 
 wb
 ->
 Ä_em±y_£gs
  =
 
-438 
+492 
 	`©omic64_»ad
 (&
 wb
@@ -1777,7 +1983,7 @@ wb
 Ä_£gm’ts
 
 
-439 - 
+493 - 
 wb
 ->
 cu¼’t_£g
@@ -1785,11 +1991,11 @@ cu¼’t_£g
 id
 ;
 
-440 
+494 
 	}
 }
 
-443 
+497 
 u32
  
 	$ÿlc_Ä_wr™eback
@@ -1799,13 +2005,13 @@ wb_deviû
 wb
 )
 
-445 
+499 
 u32
  
 Ä_wr™eback_ÿndid©es
  =
 
-446 
+500 
 	`©omic64_»ad
 (&
 wb
@@ -1813,7 +2019,7 @@ wb
 Ï¡_æushed_£gm’t_id
 )
 
-447 - 
+501 - 
 	`©omic64_»ad
 (&
 wb
@@ -1821,7 +2027,7 @@ wb
 Ï¡_wr™eback_£gm’t_id
 );
 
-450 
+504 
 u32
  
 Ä_max_b©ch
@@ -1833,7 +2039,7 @@ wb
 Ä_max_b©ched_wr™eback
 );
 
-451 ià(
+505 ià(
 wb
 ->
 Ä_wr™eback_£gs
@@ -1841,7 +2047,7 @@ wb
 Ä_max_b©ch
 )
 
-452 
+506 
 	`Œy_®loc_wr™eback_ios
 (
 wb
@@ -1853,7 +2059,7 @@ GFP_NOIO
 __GFP_NOWARN
 );
 
-459  
+513  
 	`mš3
 (
 Ä_wr™eback_ÿndid©es
@@ -1865,11 +2071,11 @@ wb
 Ä_em±y_£gs
  + 1);
 
-460 
+514 
 	}
 }
 
-462 
+516 
 boÞ
  
 	$should_wr™eback
@@ -1879,7 +2085,7 @@ wb_deviû
 wb
 )
 
-464  
+518  
 	`ACCESS_ONCE
 (
 wb
@@ -1887,7 +2093,7 @@ wb
 ®low_wr™eback
 ) ||
 
-465 
+519 
 	`ACCESS_ONCE
 (
 wb
@@ -1895,7 +2101,7 @@ wb
 urge_wr™eback
 ) ||
 
-466 
+520 
 	`ACCESS_ONCE
 (
 wb
@@ -1903,11 +2109,11 @@ wb
 fÜû_drÝ
 );
 
-467 
+521 
 	}
 }
 
-469 
+523 
 	$do_wr™eback_´oc
 (
 wb_deviû
@@ -1915,7 +2121,7 @@ wb_deviû
 wb
 )
 
-471 
+525 
 u32
  
 k
@@ -1923,19 +2129,19 @@ k
 Ä_wr™eback_tbd
 ;
 
-473 ià(!
+527 ià(!
 	`should_wr™eback
 (
 wb
 )) {
 
-474 
+528 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
 (1000));
 
-478 
+532 
 Ä_wr™eback_tbd
  = 
 	`ÿlc_Ä_wr™eback
@@ -1943,27 +2149,27 @@ wb
 wb
 );
 
-479 ià(!
+533 ià(!
 Ä_wr™eback_tbd
 ) {
 
-480 
+534 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
 (1000));
 
-484 
+538 
 	`smp_rmb
 ();
 
-487 
+541 
 k
  = 0; k < 
 Ä_wr™eback_tbd
 ; k++) {
 
-488 
+542 
 wr™eback_£gm’t
  *
 wr™eback_£g
@@ -1975,7 +2181,7 @@ wr™eback_£gs
 k
 );
 
-489 
+543 
 wr™eback_£g
 ->
 £g
@@ -1985,7 +2191,7 @@ wr™eback_£g
 wb
 ,
 
-490 
+544 
 	`©omic64_»ad
 (&
 wb
@@ -1995,7 +2201,7 @@ wb
 k
 );
 
-492 
+546 
 wb
 ->
 Ä_cur_b©ched_wr™eback
@@ -2003,13 +2209,13 @@ wb
 Ä_wr™eback_tbd
 ;
 
-494 ià(!
+548 ià(!
 	`do_wr™eback_£gs
 (
 wb
 ))
 
-498 
+552 
 k
  = 0; k < 
 wb
@@ -2017,7 +2223,7 @@ wb
 Ä_cur_b©ched_wr™eback
 ; k++) {
 
-499 
+553 
 wr™eback_£gm’t
  *
 wr™eback_£g
@@ -2029,7 +2235,7 @@ wr™eback_£gs
 k
 );
 
-500 
+554 
 	`m¬k_þ—n_£g
 (
 wb
@@ -2039,11 +2245,11 @@ wr™eback_£g
 £g
 );
 
-503 
+557 
 	`smp_wmb
 ();
 
-504 
+558 
 	`©omic64_add
 (
 wb
@@ -2053,7 +2259,7 @@ wb
 Ï¡_wr™eback_£gm’t_id
 );
 
-505 
+559 
 	`wake_up
 (&
 wb
@@ -2061,17 +2267,17 @@ wb
 wr™eback_wa™_queue
 );
 
-506 
+560 
 	}
 }
 
-508 
+562 
 	$wr™eback_d«mÚ_´oc
 (*
 d©a
 )
 
-510 
+564 
 wb_deviû
  *
 wb
@@ -2079,21 +2285,21 @@ wb
 d©a
 ;
 
-511 !
+565 !
 	`kth»ad_should_¡Ý
 ())
 
-512 
+566 
 	`do_wr™eback_´oc
 (
 wb
 );
 
-514 
+568 
 	}
 }
 
-520 
+574 
 	$wa™_fÜ_wr™eback
 (
 wb_deviû
@@ -2105,7 +2311,7 @@ u64
 id
 )
 
-522 ià(
+576 ià(
 	`©omic64_»ad
 (&
 wb
@@ -2115,7 +2321,7 @@ wb
 id
 ) {
 
-523 
+577 
 wb
 ->
 urge_wr™eback
@@ -2123,7 +2329,7 @@ urge_wr™eback
 Œue
 ;
 
-524 
+578 
 	`wake_up_´oûss
 (
 wb
@@ -2131,7 +2337,7 @@ wb
 wr™eback_d«mÚ
 );
 
-525 
+579 
 	`wa™_ev’t
 (
 wb
@@ -2139,7 +2345,7 @@ wb
 wr™eback_wa™_queue
 ,
 
-526 
+580 
 	`©omic64_»ad
 (&
 wb
@@ -2149,7 +2355,7 @@ wb
 id
 );
 
-527 
+581 
 wb
 ->
 urge_wr™eback
@@ -2157,21 +2363,21 @@ urge_wr™eback
 çl£
 ;
 
-529 
+583 
 	`smp_rmb
 ();
 
-530 
+584 
 	}
 }
 
-534 
+588 
 	$wr™eback_moduÏtÜ_´oc
 (*
 d©a
 )
 
-536 
+590 
 wb_deviû
  *
 wb
@@ -2179,7 +2385,7 @@ wb
 d©a
 ;
 
-538 
+592 
 hd_¡ruù
  *
 hd
@@ -2193,7 +2399,7 @@ bdev
 bd_·¹
 ;
 
-539 
+593 
 Þd
  = 0, 
 Ãw
@@ -2201,15 +2407,15 @@ bd_·¹
 utž
 ;
 
-540 
+594 
 štvl
  = 1000;
 
-542 !
+596 !
 	`kth»ad_should_¡Ý
 ()) {
 
-543 
+597 
 Ãw
  = 
 	`jiff›s_to_m£cs
@@ -2221,7 +2427,7 @@ hd
 io_ticks
 ));
 
-545 
+599 
 utž
  = 
 	`div_u64
@@ -2231,7 +2437,7 @@ utž
 Þd
 ), 1000);
 
-547 ià(
+601 ià(
 utž
  < 
 	`ACCESS_ONCE
@@ -2241,7 +2447,7 @@ wb
 wr™eback_th»shÞd
 ))
 
-548 
+602 
 wb
 ->
 ®low_wr™eback
@@ -2249,7 +2455,7 @@ wb
 Œue
 ;
 
-550 
+604 
 wb
 ->
 ®low_wr™eback
@@ -2257,19 +2463,19 @@ wb
 çl£
 ;
 
-552 
+606 
 Þd
  = 
 Ãw
 ;
 
-554 
+608 
 	`upd©e_Ä_em±y_£gs
 (
 wb
 );
 
-556 
+610 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
@@ -2277,11 +2483,11 @@ wb
 štvl
 ));
 
-559 
+613 
 	}
 }
 
-563 
+617 
 	$upd©e_su³rblock_»cÜd
 (
 wb_deviû
@@ -2289,35 +2495,35 @@ wb_deviû
 wb
 )
 
-565 
+619 
 su³rblock_»cÜd_deviû
  
 o
 ;
 
-566 *
+620 *
 buf
 ;
 
-567 
+621 
 dm_io_»que¡
  
 io_»q
 ;
 
-568 
+622 
 dm_io_»giÚ
  
 »giÚ
 ;
 
-570 
+624 
 o
 .
 Ï¡_wr™eback_£gm’t_id
  =
 
-571 
+625 
 	`ýu_to_Ë64
 (
 	`©omic64_»ad
@@ -2327,7 +2533,7 @@ wb
 Ï¡_wr™eback_£gm’t_id
 ));
 
-573 
+627 
 buf
  = 
 	`mempoÞ_®loc
@@ -2339,17 +2545,17 @@ buf_8_poÞ
 GFP_NOIO
 );
 
-574 ià(!
+628 ià(!
 buf
 )
 
-577 
+631 
 	`mem£t
 (
 buf
 , 0, 8 << 9);
 
-578 
+632 
 	`memýy
 (
 buf
@@ -2357,17 +2563,17 @@ buf
 o
 , (o));
 
-580 
+634 
 io_»q
  = (
 dm_io_»que¡
 ) {
 
-581 
+635 
 WB_IO_WRITE_FUA
 ,
 
-582 .
+636 .
 þ›Á
  = 
 wb
@@ -2375,7 +2581,7 @@ wb
 io_þ›Á
 ,
 
-583 .
+637 .
 nÙify
 .
 â
@@ -2383,7 +2589,7 @@ nÙify
 NULL
 ,
 
-584 .
+638 .
 mem
 .
 ty³
@@ -2391,7 +2597,7 @@ ty³
 DM_IO_KMEM
 ,
 
-585 .
+639 .
 mem
 .
 ±r
@@ -2401,13 +2607,13 @@ addr
 buf
 ,
 
-587 
+641 
 »giÚ
  = (
 dm_io_»giÚ
 ) {
 
-588 .
+642 .
 bdev
  = 
 wb
@@ -2415,15 +2621,15 @@ wb
 ÿche_dev
 ->bdev,
 
-589 .
+643 .
 £ùÜ
  = (1 << 11) - 8,
 
-590 .
+644 .
 couÁ
  = 8,
 
-592 
+646 
 	`wb_io
 (&
 io_»q
@@ -2435,7 +2641,7 @@ NULL
 çl£
 );
 
-594 
+648 
 	`mempoÞ_ä“
 (
 buf
@@ -2445,17 +2651,17 @@ wb
 buf_8_poÞ
 );
 
-595 
+649 
 	}
 }
 
-597 
+651 
 	$sb_»cÜd_upd©”_´oc
 (*
 d©a
 )
 
-599 
+653 
 wb_deviû
  *
 wb
@@ -2463,15 +2669,15 @@ wb
 d©a
 ;
 
-601 
+655 
 štvl
 ;
 
-603 !
+657 !
 	`kth»ad_should_¡Ý
 ()) {
 
-605 
+659 
 štvl
  = 
 	`ACCESS_ONCE
@@ -2481,23 +2687,23 @@ wb
 upd©e_sb_»cÜd_š‹rv®
 ) * 1000;
 
-607 ià(!
+661 ià(!
 štvl
 ) {
 
-608 
+662 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
 (1000));
 
-612 
+666 
 	`upd©e_su³rblock_»cÜd
 (
 wb
 );
 
-613 
+667 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
@@ -2505,17 +2711,17 @@ wb
 štvl
 ));
 
-616 
+670 
 	}
 }
 
-620 
+674 
 	$d©a_synchrÚiz”_´oc
 (*
 d©a
 )
 
-622 
+676 
 wb_deviû
  *
 wb
@@ -2523,15 +2729,15 @@ wb
 d©a
 ;
 
-623 
+677 
 štvl
 ;
 
-625 !
+679 !
 	`kth»ad_should_¡Ý
 ()) {
 
-627 
+681 
 štvl
  = 
 	`ACCESS_ONCE
@@ -2541,23 +2747,23 @@ wb
 sync_d©a_š‹rv®
 ) * 1000;
 
-629 ià(!
+683 ià(!
 štvl
 ) {
 
-630 
+684 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
 (1000));
 
-634 
+688 
 	`æush_cu¼’t_bufãr
 (
 wb
 );
 
-635 
+689 
 	`blkdev_issue_æush
 (
 wb
@@ -2571,7 +2777,7 @@ GFP_NOIO
 NULL
 );
 
-636 
+690 
 	`scheduË_timeout_š‹¼u±ibË
 (
 	`m£cs_to_jiff›s
@@ -2579,7 +2785,7 @@ NULL
 štvl
 ));
 
-639 
+693 
 	}
 }
 
@@ -15428,7 +15634,7 @@ wr™e_¬ound_mode
 (
 ad­tive_wr™e_mode
 , 7, 
-çl£
+Œue
 );
 
 1587 ià(!
@@ -16731,13 +16937,41 @@ fÜû_drÝ
 ”r
 ;
 
-1901 ià(!
+1901 
+	`´štk
+("wr™e_mod¡r: %s, v®ue:%d\n",
+¬gv
+[0],argv[1]);
+
+1903 ià(!
 	`¡rÿ£cmp
 (
 ¬gv
-[0], "nr_batch")) {
+[0], "adaptive_write_mode_true")) {
 
-1906  
+1904 
+wb
+->
+ad­tive_wr™e_mode
+ = 
+Œue
+;
+
+1908 ià(!
+	`¡rÿ£cmp
+(
+¬gv
+[0], "adaptive_write_mode_false")) {
+
+1909 
+wb
+->
+ad­tive_wr™e_mode
+ = 
+çl£
+;
+
+1913  
 	`do_cÚsume_ÝtiÚ®_¬gv
 (
 wb
@@ -16745,11 +16979,11 @@ wb
 as
 , 2);
 
-1907 
+1914 
 	}
 }
 
-1909 
+1916 
 	$wr™eboo¡_™”©e_deviûs
 (
 dm_rg‘
@@ -16757,7 +16991,7 @@ dm_rg‘
 ti
 ,
 
-1910 
+1917 
 ™”©e_deviûs_ÿÎout_â
  
 â
@@ -16765,11 +16999,11 @@ ti
 d©a
 )
 
-1912 
+1919 
 r
  = 0;
 
-1913 
+1920 
 wb_deviû
  *
 wb
@@ -16779,7 +17013,7 @@ ti
 ´iv©e
 ;
 
-1915 
+1922 
 r
  = 
 	`â
@@ -16795,11 +17029,11 @@ wb
 d©a
 );
 
-1916 ià(!
+1923 ià(!
 r
 )
 
-1917 
+1924 
 r
  = 
 	`â
@@ -16815,15 +17049,15 @@ backšg_dev
 d©a
 );
 
-1919  
+1926  
 r
 ;
 
-1920 
+1927 
 	}
 }
 
-1922 
+1929 
 	$wr™eboo¡_io_hšts
 (
 dm_rg‘
@@ -16835,17 +17069,17 @@ queue_lim™s
 lim™s
 )
 
-1924 
+1931 
 	`blk_lim™s_io_Ýt
 (
 lim™s
 , 4096);
 
-1925 
+1932 
 	}
 }
 
-1927 
+1934 
 	$wr™eboo¡_¡©us
 (
 dm_rg‘
@@ -16857,7 +17091,7 @@ ti
 ty³
 ,
 
-1928 
+1935 
 æags
 , *
 »suÉ
@@ -16865,19 +17099,19 @@ ty³
 maxËn
 )
 
-1930 
+1937 
 ssize_t
  
 sz
  = 0;
 
-1931 
+1938 
 buf
 [
 BDEVNAME_SIZE
 ];
 
-1932 
+1939 
 wb_deviû
  *
 wb
@@ -16887,43 +17121,43 @@ ti
 ´iv©e
 ;
 
-1933 
+1940 
 size_t
  
 i
 ;
 
-1935 
+1942 
 ty³
 ) {
 
-1936 
+1943 
 STATUSTYPE_INFO
 :
 
-1937 
+1944 
 	`DMEMIT
 ("\ncursor: %u\nnr_caches: %u\nnr_segments: %llu\ncurrent_seg->id: %llu\nqueued_Sid: %llu\nflush_Sid: %llu\nwriteback_Sid: %llu\nnr_dirty_caches: %llu\n",
 
-1939 
+1946 
 wb
 ->
 cursÜ
 ,
 
-1941 
+1948 
 wb
 ->
 Ä_ÿches
 ,
 
-1943 
+1950 
 wb
 ->
 Ä_£gm’ts
 ,
 
-1945 
+1952 
 wb
 ->
 cu¼’t_£g
@@ -16931,7 +17165,7 @@ cu¼’t_£g
 id
 ,
 
-1947 
+1954 
 	`©omic64_»ad
 (&
 wb
@@ -16939,7 +17173,7 @@ wb
 Ï¡_queued_£gm’t_id
 ),
 
-1949 
+1956 
 	`©omic64_»ad
 (&
 wb
@@ -16947,7 +17181,7 @@ wb
 Ï¡_æushed_£gm’t_id
 ),
 
-1951 
+1958 
 	`©omic64_»ad
 (&
 wb
@@ -16955,7 +17189,7 @@ wb
 Ï¡_wr™eback_£gm’t_id
 ),
 
-1953 
+1960 
 	`©omic64_»ad
 (&
 wb
@@ -16963,13 +17197,13 @@ wb
 Ä_dœty_ÿches
 ));
 
-1955 
+1962 
 i
  = 0; i < 
 STATLEN
 ; i++) {
 
-1956 
+1963 
 ©omic64_t
  *
 v
@@ -16981,7 +17215,7 @@ wb
 i
 ];
 
-1957 
+1964 
 	`DMEMIT
 (" %Îu ", (è
 	`©omic64_»ad
@@ -16989,7 +17223,7 @@ i
 v
 ));
 
-1959 
+1966 
 	`DMEMIT
 (" %Îu\n", (è
 	`©omic64_»ad
@@ -16999,101 +17233,101 @@ wb
 couÁ_nÚ_fuÎ_æushed
 ));
 
-1962 
+1969 
 	`DMEMIT
 ("‚r_max_batched_writeback: %d\n",
 
-1963 
+1970 
 wb
 ->
 Ä_max_b©ched_wr™eback
 );
 
-1964 
+1971 
 	`DMEMIT
 (" writeback_threshold: %d\n",
 
-1965 
+1972 
 wb
 ->
 wr™eback_th»shÞd
 );
 
-1966 
+1973 
 	`DMEMIT
 ("‚r_cur_batched_writeback: %u\n",
 
-1967 
+1974 
 wb
 ->
 Ä_cur_b©ched_wr™eback
 );
 
-1968 
+1975 
 	`DMEMIT
 (" sync_data_interval: %lu\n",
 
-1969 
+1976 
 wb
 ->
 sync_d©a_š‹rv®
 );
 
-1970 
+1977 
 	`DMEMIT
 (" update_sb_record_interval: %lu\n",
 
-1971 
+1978 
 wb
 ->
 upd©e_sb_»cÜd_š‹rv®
 );
 
-1972 
+1979 
 	`DMEMIT
 ("„ead_cache_threshold: %u\n",
 
-1973 
+1980 
 wb
 ->
 »ad_ÿche_th»shÞd
 );
 
-1974 
+1981 
 	`DMEMIT
 ("‚r_empty_segs: %u\n",
 
-1975 
+1982 
 wb
 ->
 Ä_em±y_£gs
 );
 
-1976 
+1983 
 	`DMEMIT
 ("‚r_read_cache_cells: %u\n",
 
-1977 
+1984 
 wb
 ->
 Ä_»ad_ÿche_ûÎs
 );
 
-1978 
+1985 
 	`DMEMIT
 ("‡daptive_write_mode: %u\n",
 
-1979 
+1986 
 wb
 ->
 ad­tive_wr™e_mode
 );
 
-1982 
+1989 
 STATUSTYPE_TABLE
 :
 
-1983 
+1990 
 	`fÜm©_dev_t
 (
 buf
@@ -17107,13 +17341,13 @@ bdev
 bd_dev
 );
 
-1984 
+1991 
 	`DMEMIT
 ("%s", 
 buf
 );
 
-1985 
+1992 
 	`fÜm©_dev_t
 (
 buf
@@ -17127,13 +17361,13 @@ bdev
 bd_dev
 );
 
-1986 
+1993 
 	`DMEMIT
 (" %s", 
 buf
 );
 
-1988 
+1995 
 i
  = 0; i < 
 wb
@@ -17141,7 +17375,7 @@ wb
 Ä_ùr_¬gs
 ; i++)
 
-1989 
+1996 
 	`DMEMIT
 (" %s", 
 wb
@@ -17151,95 +17385,95 @@ wb
 i
 ]);
 
-1992 
+1999 
 	}
 }
 
-1994 
+2001 
 rg‘_ty³
  
 	gwr™eboo¡_rg‘
  = {
 
-1995 .
+2002 .
 Çme
  = "writeboost",
 
-1996 .
+2003 .
 	gv”siÚ
  = {2, 2, 8},
 
-1997 .
+2004 .
 	gmoduË
  = 
 THIS_MODULE
 ,
 
-1998 .
+2005 .
 	gm­
  = 
 wr™eboo¡_m­
 ,
 
-1999 .
+2006 .
 	g’d_io
  = 
 wr™eboo¡_’d_io
 ,
 
-2000 .
+2007 .
 	gùr
  = 
 wr™eboo¡_ùr
 ,
 
-2001 .
+2008 .
 	gdŒ
  = 
 wr™eboo¡_dŒ
 ,
 
-2002 .
+2009 .
 	gpo¡su¥’d
  = 
 wr™eboo¡_po¡su¥’d
 ,
 
-2003 .
+2010 .
 	gmes§ge
  = 
 wr™eboo¡_mes§ge
 ,
 
-2004 .
+2011 .
 	g¡©us
  = 
 wr™eboo¡_¡©us
 ,
 
-2005 .
+2012 .
 	gio_hšts
  = 
 wr™eboo¡_io_hšts
 ,
 
-2006 .
+2013 .
 	g™”©e_deviûs
  = 
 wr™eboo¡_™”©e_deviûs
 ,
 
-2009 
+2016 
 __š™
  
 	$wr™eboo¡_moduË_š™
 ()
 
-2011 
+2018 
 ”r
  = 0;
 
-2013 
+2020 
 ”r
  = 
 	`dm_»gi¡”_rg‘
@@ -17247,65 +17481,65 @@ __š™
 wr™eboo¡_rg‘
 );
 
-2014 ià(
+2021 ià(
 ”r
  < 0) {
 
-2015 
+2022 
 	`DMERR
 ("Failedo„egisterarget");
 
-2016  
+2023  
 ”r
 ;
 
-2019  
+2026  
 ”r
 ;
 
-2020 
+2027 
 	}
 }
 
-2022 
+2029 
 __ex™
  
 	$wr™eboo¡_moduË_ex™
 ()
 
-2024 
+2031 
 	`dm_uÄegi¡”_rg‘
 (&
 wr™eboo¡_rg‘
 );
 
-2025 
+2032 
 	}
 }
 
-2027 
+2034 
 moduË_š™
 (
 wr™eboo¡_moduË_š™
 );
 
-2028 
+2035 
 moduË_ex™
 (
 wr™eboo¡_moduË_ex™
 );
 
-2030 
+2037 
 MODULE_AUTHOR
 ("Akira Hayakawa <ruby.wktk@gmail.com>");
 
-2031 
+2038 
 MODULE_DESCRIPTION
 (
 DM_NAME
  " writeboostarget");
 
-2032 
+2039 
 MODULE_LICENSE
 ("GPL");
 
@@ -18235,21 +18469,27 @@ boÞ
 	mad­tive_wr™e_mode
 ;
 
-473 
+469 
+boÞ
+ 
+	mad­tive_wr™e_mode_§ved
+;
+
+474 
 	swr™e_io
  {
 
-474 *
+475 *
 	md©a
 ;
 
-475 
+476 
 u8
  
 	md©a_b™s
 ;
 
-478 
+479 
 acquœe_Ãw_£g
 (
 wb_deviû
@@ -18259,31 +18499,31 @@ u64
 id
 );
 
-479 
+480 
 cursÜ_š™
 (
 wb_deviû
  *);
 
-480 
+481 
 æush_cu¼’t_bufãr
 (
 wb_deviû
  *);
 
-481 
+482 
 šc_Ä_dœty_ÿches
 (
 wb_deviû
  *);
 
-482 
+483 
 dec_Ä_dœty_ÿches
 (
 wb_deviû
  *);
 
-483 
+484 
 boÞ
  
 m¬k_þ—n_mb
@@ -18293,7 +18533,7 @@ wb_deviû
 m‘ablock
  *);
 
-484 
+485 
 dœtšess
  
 »ad_mb_dœtšess
@@ -18305,7 +18545,7 @@ wb_deviû
 m‘ablock
  *);
 
-485 
+486 
 ´•¬e_ov”wr™e
 (
 wb_deviû
@@ -18323,7 +18563,7 @@ u8
 ov”wr™e_b™s
 );
 
-489 
+490 
 	#ASSERT
 (
 cÚd
@@ -18333,13 +18573,13 @@ cÚd
 
 	)
 
-491 
+492 
 	#check_bufãr_®ignm’t
 (
 buf
 ) \
 
-492 
+493 
 	`do_check_bufãr_®ignm’t
 (
 buf
@@ -18349,17 +18589,17 @@ __func__
 
 	)
 
-493 
+494 
 do_check_bufãr_®ignm’t
 (*, const *, const *);
 
-495 
+496 
 bio_io_sucûss_com·t
 (
 bio
  *bio);
 
-501 
+502 
 	#wb_io
 (
 io_»q
@@ -18373,7 +18613,7 @@ num_»giÚs
 th»ad
 ) \
 
-502 
+503 
 	`wb_io_š‹º®
 (
 wb
@@ -18385,7 +18625,7 @@ num_»giÚs
 »giÚs
 ), \
 
-503 (
+504 (
 ”r_b™s
 ), (
 th»ad
@@ -18395,7 +18635,7 @@ __func__
 
 	)
 
-504 
+505 
 wb_io_š‹º®
 (
 wb_deviû
@@ -18403,13 +18643,13 @@ wb_deviû
 dm_io_»que¡
  *,
 
-505 
+506 
 num_»giÚs
 , 
 dm_io_»giÚ
  *,
 
-506 *
+507 *
 ”r_b™s
 , 
 boÞ
@@ -18419,7 +18659,7 @@ th»ad
 ÿÎ”
 );
 
-508 
+509 
 £ùÜ_t
  
 dm_devsize
@@ -18427,13 +18667,13 @@ dm_devsize
 dm_dev
  *);
 
-512 #ià
+513 #ià
 LINUX_VERSION_CODE
  >ð
 KERNEL_VERSION
 (4,8,0)
 
-513 
+514 
 	#»q_is_wr™e
 (
 »q
@@ -18445,7 +18685,7 @@ bi_Ý
 
 	)
 
-514 
+515 
 	#bio_is_b¬r›r
 (
 bio
@@ -18457,7 +18697,7 @@ REQ_PREFLUSH
 
 	)
 
-515 
+516 
 	#bio_is_fua
 (
 bio
@@ -18469,7 +18709,7 @@ REQ_FUA
 
 	)
 
-516 
+517 
 	#WB_IO_WRITE
  .
 bi_Ý
@@ -18481,7 +18721,7 @@ bi_Ý_æags
 
 	)
 
-517 
+518 
 	#WB_IO_READ
  .
 bi_Ý
@@ -18493,7 +18733,7 @@ bi_Ý_æags
 
 	)
 
-518 
+519 
 	#WB_IO_WRITE_FUA
  .
 bi_Ý
@@ -18507,7 +18747,7 @@ REQ_FUA
 
 	)
 
-520 
+521 
 	#»q_is_wr™e
 (
 »q
@@ -18519,7 +18759,7 @@ WRITE
 
 	)
 
-521 
+522 
 	#bio_is_b¬r›r
 (
 bio
@@ -18531,7 +18771,7 @@ REQ_FLUSH
 
 	)
 
-522 
+523 
 	#bio_is_fua
 (
 bio
@@ -18543,7 +18783,7 @@ REQ_FUA
 
 	)
 
-523 
+524 
 	#WB_IO_WRITE
  .
 bi_rw
@@ -18553,7 +18793,7 @@ WRITE
 
 	)
 
-524 
+525 
 	#WB_IO_READ
  .
 bi_rw
@@ -18563,7 +18803,7 @@ READ
 
 	)
 
-525 
+526 
 	#WB_IO_WRITE_FUA
  .
 bi_rw

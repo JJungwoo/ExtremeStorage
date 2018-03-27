@@ -1,6 +1,6 @@
 ./dm-writeboost-metadata.c
-./dm-writeboost-target.c
-./dm-writeboost-metadata.h
 ./dm-writeboost-daemon.h
+./dm-writeboost-metadata.h
 ./dm-writeboost.h
+./dm-writeboost-target.c
 ./dm-writeboost-daemon.c

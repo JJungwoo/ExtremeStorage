@@ -23,14 +23,14 @@
 
 #include <linux/rbtree.h>
 
-
+// 추가 기능 함수들
 /*----------------------------------------------------------------------------*/
 /*
  * (jjo) 하나의 세그먼트 내부 metablock의  sector 정보를 확인하여 
  * 순차적인 * io 패턴일 경우 1을 반환 랜덤 io일 경우에는 0을 반환하게 됨.
  */
 
-int check_io_pattern(struct dm_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
+int check_io_pattern(struct dm_device *wb, struct segment_header *seg)
 {
 	u8 i = 0;
 	u64 prev_sector = 0;
@@ -54,6 +54,65 @@ int check_io_pattern(struct dm_device *wb, struct rambuffer *rambuf, struct segm
 	if(100 > sequential_count)
 		return 0;
 	return sequential_count;
+}
+
+/*
+ * (jjo)segment(512KB) 단위를 순차적으로 cache에 기록하는 flush처리에서 HDD에 write_through 처리를
+ * 하기 위해서는 segment내부의 metablock(4KB)에서 sector(512B) 단위로 기록해야 하기 때문에 
+ * segment 내부 invalid 한 sector만 기록하는 함수.
+ */
+
+void segment_write_through(struct dm_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
+{
+	u8 i, j;
+	struct metablock *mb;
+	for(i = 0; i < seg->length; i++) {
+		mb = seg->mb_array + i;
+		if(mb->dirtiness->data_bits == 255) {
+			struct dm_io_request io_req = {
+				WB_IO_WRITE,
+				.client = wb->io_client,
+				.notify.fn = NULL,
+				.mem.type = DM_IO_VMA,
+				.mem.ptr.addr = rambuf->data,
+			};
+			struct dm_io_region region = {
+				.bdev = wb->backing_dev->bdev,
+				.sector = mb->sector,
+				.count = 1 << 3,
+			};
+			if (wb_io(&io_req, 1, &region, NULL, false)) {
+				printk("segment_write_throgh error..\n");
+				return;
+			}
+		} else {
+			for (j = 0; j < 8; j++) {
+				struct dm_io_request io_req;
+				struct dm_io_region region;
+
+				bool bit_on = mb->dirtiness->data_bits & (1 << i);
+				if (!bit_on)
+					continue;
+
+				io_req = (struct dm_io_request) { 
+					WB_IO_WRITE,
+					.client = wb->io_client,
+					.notify.fn = NULL,
+					.mem.type = DM_IO_VMA,
+					.mem.ptr.addr = rambuf->data + (i << 9),
+				};
+				region = (struct dm_io_region) {
+					.bdev = wb->backing_dev->bdev,
+					.sector = mb->sector + i,
+					.count = 1,
+				};
+				if (wb_io(&io_req, 1, &region, NULL, false)) {
+					printk("segment_write_throgh error..\n");
+					return;
+				}
+			}
+		}
+	}
 }
 
 /*----------------------------------------------------------------------------*/
@@ -138,20 +197,8 @@ static void do_flush_proc(struct wb_device *wb)
 
 	//(jjo) sequentail io check
 	
-	if(check_io_pattern(wb, rambuf, seg) && (true == wb->adaptive_write_mode)) { // sequential io
-		struct metablock *mb; 
-		io_req = (struct dm_io_request) {
-			WB_IO_WRITE,
-			.client = wb->io_client,
-			.notify.fn = NULL,
-			.mem.type = DM_IO_VMA,
-			.mem.ptr.addr = rambuf->data,
-		};
-		region = (struct dm_io_region) {
-			.bdev = wb->backing_dev->bdev,
-			.sector = seg->start_sector,
-			.count = (seg->length + 1) << 3,
-		};
+	if(check_io_pattern(wb, seg) && (true == wb->adaptive_write_mode)) { // sequential io
+		segment_write_through(wb, rambuf, seg); 
 	} else {	// random io
 		io_req = (struct dm_io_request) {
 			WB_IO_WRITE,
@@ -169,7 +216,9 @@ static void do_flush_proc(struct wb_device *wb)
 			return;
 	}
 
-
+	//if (wb_io(&io_req, 1, &region, NULL, false))
+	//	return;
+	
 	/*
 	 * Deferred ACK for barrier requests
 	 * To serialize barrier ACK in logging we wait for the previous segment
