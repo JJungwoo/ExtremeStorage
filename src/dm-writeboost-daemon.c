@@ -30,7 +30,7 @@
  * 순차적인 * io 패턴일 경우 1을 반환 랜덤 io일 경우에는 0을 반환하게 됨.
  */
 
-int check_io_pattern(struct dm_device *wb, struct segment_header *seg)
+int check_io_pattern(struct wb_device *wb, struct segment_header *seg)
 {
 	u8 i = 0;
 	u64 prev_sector = 0;
@@ -48,7 +48,7 @@ int check_io_pattern(struct dm_device *wb, struct segment_header *seg)
 		prev_sector = mb->sector;
 	}
 
-	//printk("check_io_pattern(): seq_count: %u\n",sequential_count);
+	printk("check_io_pattern(): seq_count: %u\n",sequential_count);
 
 	//if(0 > sequential_count)
 	if(100 > sequential_count)
@@ -60,21 +60,29 @@ int check_io_pattern(struct dm_device *wb, struct segment_header *seg)
  * (jjo)segment(512KB) 단위를 순차적으로 cache에 기록하는 flush처리에서 HDD에 write_through 처리를
  * 하기 위해서는 segment내부의 metablock(4KB)에서 sector(512B) 단위로 기록해야 하기 때문에 
  * segment 내부 invalid 한 sector만 기록하는 함수.
+ * is_dirty를 clean 처리하여 이후 writeback되지 않게 함.
  */
 
-void segment_write_through(struct dm_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
+void segment_write_through(struct wb_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
 {
 	u8 i, j;
 	struct metablock *mb;
-	for(i = 0; i < seg->length; i++) {
+	printk("segment_write_through()\n");
+
+	for(i = 0; i < seg->length + 1; i++) {
 		mb = seg->mb_array + i;
-		if(mb->dirtiness->data_bits == 255) {
+		printk("seq IO debug: data:%llu, sector: %llu, _bits: %u\n",rambuf->data,mb->sector,mb->dirtiness.data_bits);
+		if(mb->dirtiness.is_dirty)
+			mb->dirtiness.is_dirty = false;
+		else
+			continue;
+		if(255 == mb->dirtiness.data_bits) {
 			struct dm_io_request io_req = {
 				WB_IO_WRITE,
 				.client = wb->io_client,
 				.notify.fn = NULL,
 				.mem.type = DM_IO_VMA,
-				.mem.ptr.addr = rambuf->data,
+				.mem.ptr.addr = rambuf->data + (i << 12), // 4KB
 			};
 			struct dm_io_region region = {
 				.bdev = wb->backing_dev->bdev,
@@ -82,7 +90,7 @@ void segment_write_through(struct dm_device *wb, struct rambuffer *rambuf, struc
 				.count = 1 << 3,
 			};
 			if (wb_io(&io_req, 1, &region, NULL, false)) {
-				printk("segment_write_throgh error..\n");
+				printk("segment_write_throgh 4KB write error..\n");
 				return;
 			}
 		} else {
@@ -90,7 +98,7 @@ void segment_write_through(struct dm_device *wb, struct rambuffer *rambuf, struc
 				struct dm_io_request io_req;
 				struct dm_io_region region;
 
-				bool bit_on = mb->dirtiness->data_bits & (1 << i);
+				bool bit_on = mb->dirtiness.data_bits & (1 << j);
 				if (!bit_on)
 					continue;
 
@@ -99,19 +107,20 @@ void segment_write_through(struct dm_device *wb, struct rambuffer *rambuf, struc
 					.client = wb->io_client,
 					.notify.fn = NULL,
 					.mem.type = DM_IO_VMA,
-					.mem.ptr.addr = rambuf->data + (i << 9),
+					.mem.ptr.addr = rambuf->data + ((i << 12) + (j << 9)), // 512B(sector)
 				};
 				region = (struct dm_io_region) {
 					.bdev = wb->backing_dev->bdev,
-					.sector = mb->sector + i,
+					.sector = mb->sector + j,
 					.count = 1,
 				};
 				if (wb_io(&io_req, 1, &region, NULL, false)) {
-					printk("segment_write_throgh error..\n");
+					printk("segment_write_throgh 512KB write error..\n");
 					return;
 				}
 			}
 		}
+
 	}
 }
 
@@ -197,15 +206,14 @@ static void do_flush_proc(struct wb_device *wb)
 
 	//(jjo) sequentail io check
 	
-	if(check_io_pattern(wb, seg) && (true == wb->adaptive_write_mode)) { // sequential io
-		segment_write_through(wb, rambuf, seg); 
-	} else {	// random io
+	if(!wb->adaptive_write_mode) { 
+		printk("debug data: %llu, sector: %llu, count:%lu\n",rambuf->data,seg->start_sector,seg->length+1);
 		io_req = (struct dm_io_request) {
 			WB_IO_WRITE,
 			.client = wb->io_client,
 			.notify.fn = NULL,
 			.mem.type = DM_IO_VMA,
-			.mem.ptr.addr = rambuf->data,
+			.mem.ptr.addr = rambuf->data, // rambuf->data의 크기는 512KB
 		};
 		region = (struct dm_io_region) {
 			.bdev = wb->cache_dev->bdev,
@@ -214,7 +222,45 @@ static void do_flush_proc(struct wb_device *wb)
 		};
 		if (wb_io(&io_req, 1, &region, NULL, false))
 			return;
+	} else {
+		if(check_io_pattern(wb, seg)) {		// sequential io
+			printk("sequential io check!!\n");
+			segment_write_through(wb, rambuf, seg); 
+			/*io_req = (struct dm_io_request) {	// 512KB 단위로 기록xx.. metablock의 sector가 연속적으로 구성이 안되어 있을 수도 있음...
+				WB_IO_WRITE,
+				.client = wb->io_client,
+				.notify.fn = NULL,
+				.notify.context = wb,
+				.mem.type = DM_IO_VMA,
+				.mem.ptr.addr = rambuf->data,
+			};
+			region = (struct dm_io_region) {
+				.bdev = wb->backing_dev->bdev,
+				.sector = seg->start_sector,
+				.count = (seg->length + 1) << 3,
+			};
+			if (wb_io(&io_req, 1, &region, NULL, false))
+				return;*/
+		} else {							// random io
+			printk("do_flush_proc() count: %lu, sector: %llu\n",(seg->length+1)<<3,seg->start_sector);
+			printk("random io check!!\n");
+			io_req = (struct dm_io_request) {
+				WB_IO_WRITE,
+				.client = wb->io_client,
+				.notify.fn = NULL,
+				.mem.type = DM_IO_VMA,
+				.mem.ptr.addr = rambuf->data,
+			};
+			region = (struct dm_io_region) {
+				.bdev = wb->cache_dev->bdev,
+				.sector = seg->start_sector,		// 512 크기의 sector 총 1024개 총 512KB
+				.count = (seg->length + 1) << 3,	// 1024 즉 개수를 나타냄.
+			};
+			if (wb_io(&io_req, 1, &region, NULL, false))
+				return;
+		}
 	}
+
 
 	//if (wb_io(&io_req, 1, &region, NULL, false))
 	//	return;
@@ -266,6 +312,8 @@ static void writeback_endio(unsigned long error, void *context)
 static void submit_writeback_io(struct wb_device *wb, struct writeback_io *writeback_io)
 {
 	ASSERT(writeback_io->data_bits > 0);
+	
+	printk("submit_writeback_io() addr: %llu\n",writeback_io->data);
 
 	if (writeback_io->data_bits == 255) {
 		struct dm_io_request io_req_w = {
@@ -288,6 +336,8 @@ static void submit_writeback_io(struct wb_device *wb, struct writeback_io *write
 		for (i = 0; i < 8; i++) {
 			struct dm_io_request io_req_w;
 			struct dm_io_region region_w;
+
+			printk("sector word submit_writeback_io() addr: %llu\n",writeback_io->data + (i<<9));
 
 			bool bit_on = writeback_io->data_bits & (1 << i);
 			if (!bit_on)

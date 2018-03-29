@@ -1582,7 +1582,7 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 		consume_kv(read_cache_threshold, 4, false);
 		consume_kv(write_around_mode, 5, true);
 		consume_kv(nr_read_cache_cells, 6, true);
-		consume_kv(adaptive_write_mode, 7, true);
+		consume_kv(adaptive_write_mode, 7, false);
 
 		if (!err) {
 			argc--;
