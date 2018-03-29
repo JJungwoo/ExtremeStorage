@@ -14,28 +14,28 @@ Log-structured Caching for Linux
 	- Cache device: 128GB SSD (Samsung 850 pro)
  * Memory: 8GB
  * BenchMark: FIO(3.3-18.v), DD
- **테스트 방법**
- **Create Extreme Cache**
- * sudo git clone https://github.com/JJungwoo/extremestorage.git
- 아래의 방법으로 rpmforge를 설치할 수 없을 경우 코드를 직접 받아서 설치해야함.
- * sudo rpm -ivh http://repository.it4i.cz/mirrors/repoforge/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm 
- * sudo yum check-update 
- * sudo yum install -y dkms
- * sudo make install (extreme-cache 가상 상위 디렉터리에서 실행.)
- * sudo modprobe dm-writeboost
- * sudo dd if=/dev/zero of=/dev/myssd count=1
-  - zero out the first 1 sector to trigger formatting
- * sudo dmsetup create mylv --table “0 `blockdev --getsize /dev/myraid` writeboost /dev/myraid /dev/myssd”
-  - create /dev/mapper/mylv
- * Play with /dev/mapper/mylv
+- **테스트 방법**
+- **Create Extreme Cache**
+ - sudo git clone https://github.com/JJungwoo/extremestorage.git
+   아래의 방법으로 rpmforge를 설치할 수 없을 경우 코드를 직접 받아서 설치해야함.
+ - sudo rpm -ivh http://repository.it4i.cz/mirrors/repoforge/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm 
+ - sudo yum check-update 
+ - sudo yum install -y dkms
+ - sudo make install (extreme-cache 가상 상위 디렉터리에서 실행.)
+ - sudo modprobe dm-writeboost
+ - sudo dd if=/dev/zero of=/dev/myssd count=1
+   zero out the first 1 sector to trigger formatting
+ - sudo dmsetup create mylv --table “0 `blockdev --getsize /dev/myraid` writeboost /dev/myraid /dev/myssd”
+   create /dev/mapper/mylv
+ - Play with /dev/mapper/mylv
  dd, fio, mkfs, ...
- * sudo mkfs.ext4 /dev/mapper/mylv
- * sudo mount /dev/mapper/mylv /target_directory
- **Delete Extreme Cache**
- * sudo dmsetup remove mylv
-  - remove /dev/mapper/mylv
- * sudo modprobe -r dm-writeboost
- * sudo make uninstall (extreme-cache 가장 상위 디렉터리에서 실행.)
+ - sudo mkfs.ext4 /dev/mapper/mylv
+ - sudo mount /dev/mapper/mylv /target_directory
+- **Delete Extreme Cache**
+ - sudo dmsetup remove mylv
+   remove /dev/mapper/mylv
+ - sudo modprobe -r dm-writeboost
+ - sudo make uninstall (extreme-cache 가장 상위 디렉터리에서 실행.)
 
 ## Related Projects
 * https://github.com/akiradeveloper/dm-writeboost-tools: Tools to help users analyze the state of the cache device  
