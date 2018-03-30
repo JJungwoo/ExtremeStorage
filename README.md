@@ -6,18 +6,18 @@ Log-structured Caching for Linux
 
 ## Experiment Setting
 - **실험 환경**
- * CentOS Version: CentOS Linux release 7.4.1708
- * Kernel Version: 3.10.0-693.17.1.el7.x86_64
- * CPU: Intel(R) core™ i7-6700 CPU@3.40GHz
- * Storage:
-	- Backing device: 1TB HDD
-	- Cache device: 128GB SSD (Samsung 850 pro)
- * Memory: 8GB
- * BenchMark: FIO(3.3-18.v), DD
+	* CentOS Version: CentOS Linux release 7.4.1708
+	* Kernel Version: 3.10.0-693.17.1.el7.x86_64
+	* CPU: Intel(R) core™ i7-6700 CPU@3.40GHz
+	* Storage:
+		- Backing device: 1TB HDD
+		- Cache device: 128GB SSD (Samsung 850 pro)
+	* Memory: 8GB
+	* BenchMark: FIO(3.3-18.v), DD
 - **테스트 방법**
 - **Create Extreme Cache**
 	* sudo git clone https://github.com/JJungwoo/extremestorage.git
-	* 아래의 방법으로 rpmforge를 설치할 수 없을 경우 코드를 직접 받아서 설치해야함.
+		* 아래의 방법으로 rpmforge를 설치할 수 없을 경우 코드를 직접 받아서 설치해야함.
 	* sudo rpm -ivh http://repository.it4i.cz/mirrors/repoforge/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm 
 	* sudo yum check-update 
 	* sudo yum install -y dkms
@@ -33,7 +33,7 @@ Log-structured Caching for Linux
 	* sudo mount /dev/mapper/mylv /target_directory
 - **Delete Extreme Cache**
 	* sudo dmsetup remove mylv
-	* remove /dev/mapper/mylv
+		* remove /dev/mapper/mylv
 	* sudo modprobe -r dm-writeboost
 	* sudo make uninstall (extreme-cache 가장 상위 디렉터리에서 실행.)
 
