@@ -1566,6 +1566,7 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 		{0, 1, "Invalid write_around_mode"},
 		{1, 2048, "Invalid nr_read_cache_cells"},
 		{0, 1, "Invalid adaptive_write_mode"},
+		{1, 100, "Invalid sequential_threshold"},
 	};
 	unsigned tmp;
 
@@ -1583,6 +1584,7 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 		consume_kv(write_around_mode, 5, true);
 		consume_kv(nr_read_cache_cells, 6, true);
 		consume_kv(adaptive_write_mode, 7, false);
+		consume_kv(sequential_threshold, 8, false);
 
 		if (!err) {
 			argc--;
@@ -1602,7 +1604,7 @@ static int consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as)
 
 	static struct dm_arg _args[] = {
 		//{0, 14, "Invalid optional argc"},
-		{0, 15, "Invalid optional argc"},
+		{0, 16, "Invalid optional argc"},
 	};
 	unsigned argc = 0;
 
@@ -1803,6 +1805,7 @@ static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	save_arg(read_cache_threshold);
 	save_arg(nr_read_cache_cells);
 	save_arg(adaptive_write_mode);
+	save_arg(sequential_threshold);
 
 	err = resume_cache(wb);
 	if (err) {
@@ -1828,6 +1831,7 @@ static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	restore_arg(sync_data_interval);
 	restore_arg(read_cache_threshold);
 	restore_arg(adaptive_write_mode);
+	restore_arg(sequential_threshold);
 
 	return err;
 
@@ -1994,6 +1998,8 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 			   wb->write_around_mode);
 		DMEMIT(" adaptive_write_mode: %u\n",
 			   wb->adaptive_write_mode);
+		DMEMIT(" sequential_threshold: %u\n",
+			   wb->sequential_threshold);
 		break;
 
 	case STATUSTYPE_TABLE:

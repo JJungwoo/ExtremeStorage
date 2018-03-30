@@ -467,6 +467,9 @@ struct wb_device {
 	
 	bool adaptive_write_mode;
 	bool adaptive_write_mode_saved;
+	
+	u8 sequential_threshold;
+	u8 sequential_threshold_saved;
 };
 
 /*----------------------------------------------------------------------------*/

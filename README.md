@@ -37,6 +37,11 @@ Log-structured Caching for Linux
 		* remove /dev/mapper/mylv
 	* sudo modprobe -r dm-writeboost
 	* sudo make uninstall (extreme-cache 가장 상위 디렉터리에서 실행.)
+- **etc Command**
+	* sudo dmsetup status mylv
+		* 현재 extreme cache의 segment id , mode, 각 threshold 의 정보들을 확인하는 명령어
+	* sudo dmsetup message mylv 0 "변경할 상태 및 모드"
+		* ex) sudo dmsetup message mylv 0 writeback_threshold 70 
 
 ## Related Projects
 * https://github.com/akiradeveloper/dm-writeboost-tools: Tools to help users analyze the state of the cache device  

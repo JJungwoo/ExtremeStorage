@@ -50,8 +50,7 @@ int check_io_pattern(struct wb_device *wb, struct segment_header *seg)
 
 	printk("check_io_pattern(): seq_count: %u\n",sequential_count);
 
-	//if(0 > sequential_count)
-	if(100 > sequential_count)
+	if(wb->sequential_threshold > sequential_count) // sequential_threshold: 100
 		return 0;
 	return sequential_count;
 }
