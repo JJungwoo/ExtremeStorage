@@ -26,6 +26,8 @@
 
 #include "linux/sort.h"
 
+#define ACACHE
+
 /*----------------------------------------------------------------------------*/
 
 void do_check_buffer_alignment(void *buf, const char *name, const char *caller)
@@ -1247,7 +1249,6 @@ static int complete_process_write(struct wb_device *wb, struct bio *bio)
  */
 static int process_write_wb(struct wb_device *wb, struct bio *bio)
 {
-	//printk("process_write_wb() setcor size: %llu\n",bio->bi_sector);
 	int err = do_process_write(wb, bio);
 	if (err) {
 		bio_io_error(bio);
@@ -1274,18 +1275,8 @@ static int process_write_wa(struct wb_device *wb, struct bio *bio)
 	return DM_MAPIO_REMAPPED;
 }
 
-/*
-static int process_adaptive_write(struct wb_device *wb, struct bio *bio)
-{
-
-}
-*/
-
 static int process_write(struct wb_device *wb, struct bio *bio)
 {
-	/*if(adaptive_write_mode)
-		return process_adaptive_write(wb, bio);
-	else*/
 	return wb->write_around_mode ? process_write_wa(wb, bio) : process_write_wb(wb, bio);
 }
 
@@ -1558,15 +1549,20 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 
 	static struct dm_arg _args[] = {
 		{0, 100, "Invalid writeback_threshold"},
-		//{1, 32, "Invalid nr_max_batched_writeback"},
-		{1, 4096, "Invalid nr_max_batched_writeback"},
+#ifdef ACACHE
+		{1, 512, "Invalid nr_max_batched_writeback"},
+#else 
+		{1, 32, "Invalid nr_max_batched_writeback"},
+#endif
 		{0, 3600, "Invalid update_sb_record_interval"},
 		{0, 3600, "Invalid sync_data_interval"},
 		{0, 127, "Invalid read_cache_threshold"},
 		{0, 1, "Invalid write_around_mode"},
 		{1, 2048, "Invalid nr_read_cache_cells"},
+#ifdef ACACHE
 		{0, 1, "Invalid adaptive_write_mode"},
 		{1, 100, "Invalid sequential_threshold"},
+#endif
 	};
 	unsigned tmp;
 
@@ -1583,8 +1579,10 @@ static int do_consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as,
 		consume_kv(read_cache_threshold, 4, false);
 		consume_kv(write_around_mode, 5, true);
 		consume_kv(nr_read_cache_cells, 6, true);
+#ifdef ACACHE
 		consume_kv(adaptive_write_mode, 7, false);
 		consume_kv(sequential_threshold, 8, false);
+#endif
 
 		if (!err) {
 			argc--;
@@ -1603,8 +1601,11 @@ static int consume_optional_argv(struct wb_device *wb, struct dm_arg_set *as)
 	struct dm_target *ti = wb->ti;
 
 	static struct dm_arg _args[] = {
-		//{0, 14, "Invalid optional argc"},
+#ifdef ACACHE
 		{0, 16, "Invalid optional argc"},
+#else 
+		{0, 14, "Invalid optional argc"},
+#endif
 	};
 	unsigned argc = 0;
 
@@ -1804,8 +1805,10 @@ static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	save_arg(sync_data_interval);
 	save_arg(read_cache_threshold);
 	save_arg(nr_read_cache_cells);
+#ifdef ACACHE
 	save_arg(adaptive_write_mode);
 	save_arg(sequential_threshold);
+#endif
 
 	err = resume_cache(wb);
 	if (err) {
@@ -1830,9 +1833,10 @@ static int writeboost_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	restore_arg(update_sb_record_interval);
 	restore_arg(sync_data_interval);
 	restore_arg(read_cache_threshold);
+#ifdef ACACHE
 	restore_arg(adaptive_write_mode);
 	restore_arg(sequential_threshold);
-
+#endif
 	return err;
 
 bad_read_cache_cells:
@@ -1902,6 +1906,7 @@ static int writeboost_message(struct dm_target *ti, unsigned argc, char **argv)
 		return err;
 	}
 
+#ifdef ACACHE
 	if(!strcasecmp(argv[0], "write_around_mode_true")) {
 		wb->write_around_mode = true;
 		return 0;
@@ -1921,6 +1926,7 @@ static int writeboost_message(struct dm_target *ti, unsigned argc, char **argv)
 		wb->adaptive_write_mode = false;
 		return 0;
 	}	
+#endif
 
 	return do_consume_optional_argv(wb, &as, 2);
 }
@@ -1977,7 +1983,6 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 		}
 		DMEMIT(" %llu\n", (unsigned long long) atomic64_read(&wb->count_non_full_flushed));
 
-		//DMEMIT(" %d\n", 10);
 		DMEMIT(" nr_max_batched_writeback: %d\n",
 		       wb->nr_max_batched_writeback);
 		DMEMIT(" writeback_threshold: %d\n",
@@ -1994,12 +1999,14 @@ static void writeboost_status(struct dm_target *ti, status_type_t type,
 			   wb->nr_empty_segs);
 		DMEMIT(" nr_read_cache_cells: %u\n",
 			   wb->nr_read_cache_cells);
+#ifdef ACACHE
 		DMEMIT(" write_around_mode: %u\n",
 			   wb->write_around_mode);
 		DMEMIT(" adaptive_write_mode: %u\n",
 			   wb->adaptive_write_mode);
 		DMEMIT(" sequential_threshold: %u\n",
 			   wb->sequential_threshold);
+#endif
 		break;
 
 	case STATUSTYPE_TABLE:

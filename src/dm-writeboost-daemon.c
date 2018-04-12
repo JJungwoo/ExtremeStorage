@@ -23,6 +23,9 @@
 
 #include <linux/rbtree.h>
 
+#define ACACHE
+
+#ifdef ACACHE
 // 추가 기능 함수들
 /*----------------------------------------------------------------------------*/
 /*
@@ -30,27 +33,27 @@
  * 순차적인 * io 패턴일 경우 1을 반환 랜덤 io일 경우에는 0을 반환하게 됨.
  */
 
-int check_io_pattern(struct wb_device *wb, struct segment_header *seg)
+static int check_io_pattern(struct wb_device *wb, struct segment_header *seg)
 {
 	u8 i = 0;
 	u64 prev_sector = 0;
 	int sequential_count = 0;
-	struct metablock *mb;
+	struct metablock *mb = seg->mb_array;
 	prev_sector = mb->sector;
 	printk("check_io_pattern() length: %llu\n",seg->length);
-	for(i = 1; i < seg->length; i++) {
+	for (i = 1; i < seg->length; i++) {
 		mb = seg->mb_array + i;
-		if(prev_sector == mb->sector - 8)
+		if (prev_sector == mb->sector - 8)
 			sequential_count++;
 		else
 			sequential_count--;
-		printk("sequential_count: %d, sector: %llu \n",sequential_count, mb->sector);
+		//printk("sequential_count: %d, sector: %llu \n",sequential_count, mb->sector);
 		prev_sector = mb->sector;
 	}
 
 	printk("check_io_pattern(): seq_count: %u\n",sequential_count);
 
-	if(wb->sequential_threshold > sequential_count) // sequential_threshold: 100
+	if (wb->sequential_threshold > sequential_count) // sequential_threshold: 100
 		return 0;
 	return sequential_count;
 }
@@ -62,20 +65,20 @@ int check_io_pattern(struct wb_device *wb, struct segment_header *seg)
  * is_dirty를 clean 처리하여 이후 writeback되지 않게 함.
  */
 
-void segment_write_through(struct wb_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
+static void sequential_write(struct wb_device *wb, struct rambuffer *rambuf, struct segment_header *seg)
 {
 	u8 i, j;
 	struct metablock *mb;
-	printk("segment_write_through()\n");
+	printk("segment_write\n");
 
-	for(i = 0; i < seg->length + 1; i++) {
+	for (i = 0; i < seg->length ; i++) {
 		mb = seg->mb_array + i;
-		printk("seq IO debug: data:%llu, sector: %llu, _bits: %u\n",rambuf->data,mb->sector,mb->dirtiness.data_bits);
-		if(mb->dirtiness.is_dirty)
+		//printk("seq IO debug: data:%llu, sector: %llu, _bits: %u\n",rambuf->data+(i<<12),mb->sector,mb->dirtiness.data_bits);
+		if (mb->dirtiness.is_dirty)
 			mb->dirtiness.is_dirty = false;
 		else
 			continue;
-		if(255 == mb->dirtiness.data_bits) {
+		if (255 == mb->dirtiness.data_bits) {
 			struct dm_io_request io_req = {
 				WB_IO_WRITE,
 				.client = wb->io_client,
@@ -93,6 +96,7 @@ void segment_write_through(struct wb_device *wb, struct rambuffer *rambuf, struc
 				return;
 			}
 		} else {
+			printk("bit write IO debug: data:%llu, sector: %llu, _bits: %u\n",rambuf->data+(i<<12),mb->sector,mb->dirtiness.data_bits);
 			for (j = 0; j < 8; j++) {
 				struct dm_io_request io_req;
 				struct dm_io_region region;
@@ -122,6 +126,8 @@ void segment_write_through(struct wb_device *wb, struct rambuffer *rambuf, struc
 
 	}
 }
+
+#endif
 
 /*----------------------------------------------------------------------------*/
 
@@ -196,17 +202,16 @@ static void do_flush_proc(struct wb_device *wb)
 		return;
 	}
 
-	id = atomic64_read(&wb->last_flushed_segment_id) + 1;
+	id = atomic64_read(&wb->last_flushed_segment_id) + 1; //  rambuf의queued id가 가리키고 있는 segment를 얻어오기 위해.
 
 	smp_rmb();
 
 	rambuf = get_rambuffer_by_id(wb, id);
 	seg = rambuf->seg;
 
-	//(jjo) sequentail io check
-	
-	if(!wb->adaptive_write_mode) { 
-		printk("debug data: %llu, sector: %llu, count:%lu\n",rambuf->data,seg->start_sector,seg->length+1);
+#ifdef ACACHE
+	printk("seg id: %u, rambuf id: %u, check io patten: %u\n",seg->id,id,check_io_pattern(wb, seg));
+	if (!wb->adaptive_write_mode) { 
 		io_req = (struct dm_io_request) {
 			WB_IO_WRITE,
 			.client = wb->io_client,
@@ -219,29 +224,11 @@ static void do_flush_proc(struct wb_device *wb)
 			.sector = seg->start_sector,
 			.count = (seg->length + 1) << 3,
 		};
-		if (wb_io(&io_req, 1, &region, NULL, false))
-			return;
 	} else {
-		if(check_io_pattern(wb, seg)) {		// sequential io
+		if (check_io_pattern(wb, seg)) {		// sequential io
 			printk("sequential io check!!\n");
-			segment_write_through(wb, rambuf, seg); 
-			/*io_req = (struct dm_io_request) {	// 512KB 단위로 기록xx.. metablock의 sector가 연속적으로 구성이 안되어 있을 수도 있음...
-				WB_IO_WRITE,
-				.client = wb->io_client,
-				.notify.fn = NULL,
-				.notify.context = wb,
-				.mem.type = DM_IO_VMA,
-				.mem.ptr.addr = rambuf->data,
-			};
-			region = (struct dm_io_region) {
-				.bdev = wb->backing_dev->bdev,
-				.sector = seg->start_sector,
-				.count = (seg->length + 1) << 3,
-			};
-			if (wb_io(&io_req, 1, &region, NULL, false))
-				return;*/
+			sequential_write(wb, rambuf, seg); 
 		} else {							// random io
-			printk("do_flush_proc() count: %lu, sector: %llu\n",(seg->length+1)<<3,seg->start_sector);
 			printk("random io check!!\n");
 			io_req = (struct dm_io_request) {
 				WB_IO_WRITE,
@@ -259,11 +246,23 @@ static void do_flush_proc(struct wb_device *wb)
 				return;
 		}
 	}
+#else 
+	io_req = (struct dm_io_request) {
+		WB_IO_WRITE,
+		.client = wb->io_client,
+		.notify.fn = NULL,
+		.mem.type = DM_IO_VMA,
+		.mem.ptr.addr = rambuf->data, // rambuf->data의 크기는 512KB
+	};
+	region = (struct dm_io_region) {
+		.bdev = wb->cache_dev->bdev,
+		.sector = seg->start_sector,
+		.count = (seg->length + 1) << 3,
+	};
+	if (wb_io(&io_req, 1, &region, NULL, false))
+		return;
+#endif
 
-
-	//if (wb_io(&io_req, 1, &region, NULL, false))
-	//	return;
-	
 	/*
 	 * Deferred ACK for barrier requests
 	 * To serialize barrier ACK in logging we wait for the previous segment
@@ -311,8 +310,6 @@ static void writeback_endio(unsigned long error, void *context)
 static void submit_writeback_io(struct wb_device *wb, struct writeback_io *writeback_io)
 {
 	ASSERT(writeback_io->data_bits > 0);
-	
-	printk("submit_writeback_io() addr: %llu\n",writeback_io->data);
 
 	if (writeback_io->data_bits == 255) {
 		struct dm_io_request io_req_w = {
@@ -321,7 +318,7 @@ static void submit_writeback_io(struct wb_device *wb, struct writeback_io *write
 			.notify.fn = writeback_endio,
 			.notify.context = wb,
 			.mem.type = DM_IO_VMA,
-			.mem.ptr.addr = writeback_io->data,
+			.mem.ptr.addr = writeback_io->data,	// 4096
 		};
 		struct dm_io_region region_w = {
 			.bdev = wb->backing_dev->bdev,
@@ -336,8 +333,6 @@ static void submit_writeback_io(struct wb_device *wb, struct writeback_io *write
 			struct dm_io_request io_req_w;
 			struct dm_io_region region_w;
 
-			printk("sector word submit_writeback_io() addr: %llu\n",writeback_io->data + (i<<9));
-
 			bool bit_on = writeback_io->data_bits & (1 << i);
 			if (!bit_on)
 				continue;
@@ -348,7 +343,7 @@ static void submit_writeback_io(struct wb_device *wb, struct writeback_io *write
 				.notify.fn = writeback_endio,
 				.notify.context = wb,
 				.mem.type = DM_IO_VMA,
-				.mem.ptr.addr = writeback_io->data + (i << 9),
+				.mem.ptr.addr = writeback_io->data + (i << 9),	// 512
 			};
 			region_w = (struct dm_io_region) {
 				.bdev = wb->backing_dev->bdev,
@@ -459,14 +454,13 @@ static void prepare_writeback_ios(struct wb_device *wb, struct writeback_segment
 	struct segment_header *seg = writeback_seg->seg;
 
 	u8 i;
-	//printk("prepare_writeback_ios(), length: %llu\n",seg->length);
 	for (i = 0; i < seg->length; i++) {
 		struct writeback_io *writeback_io;
 
 		struct metablock *mb = seg->mb_array + i;
 		struct dirtiness dirtiness = read_mb_dirtiness(wb, seg, mb);
 		ASSERT(dirtiness.data_bits > 0);
-		//(jjo)is_dirty가 false일 때, 즉 
+
 		if (!dirtiness.is_dirty)
 			continue;
 

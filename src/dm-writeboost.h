@@ -37,6 +37,8 @@
 #include <linux/dm-io.h>
 #include <linux/dm-kcopyd.h>
 
+#define ACACHE
+
 /* We use RHEL_RELEASE_VERSION to compile with RHEL/CentOS 7.3's kernel */
 #ifndef RHEL_RELEASE_CODE
 #define RHEL_RELEASE_CODE 0
@@ -463,13 +465,15 @@ struct wb_device {
 	unsigned long flags;
 	
 	/*----------------------------------------------------------------*/
+#ifdef ACACHE
 	// adaptive write mode active status.
-	
 	bool adaptive_write_mode;
 	bool adaptive_write_mode_saved;
 	
 	u8 sequential_threshold;
 	u8 sequential_threshold_saved;
+#endif
+
 };
 
 /*----------------------------------------------------------------------------*/

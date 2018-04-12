@@ -21,6 +21,8 @@
 #include "dm-writeboost-metadata.h"
 #include "dm-writeboost-daemon.h"
 
+#define ACACHE
+
 /*----------------------------------------------------------------------------*/
 
 struct large_array {
@@ -62,7 +64,6 @@ static void large_array_free(struct large_array *arr)
 
 static void *large_array_at(struct large_array *arr, u64 i)
 {
-	//printk("large_array_at= data: %llu, elemsize: %lu, i: %llu\n",arr->data,arr->elemsize,i);
 	return arr->data + arr->elemsize * i;
 }
 
@@ -1106,7 +1107,7 @@ static struct writeback_segment *alloc_writeback_segment(struct wb_device *wb, g
 
 	for (i = 0; i < wb->nr_caches_inseg; i++) {
 		struct writeback_io *writeback_io = writeback_seg->ios + i;
-		writeback_io->data = writeback_seg->buf + (i << 12);
+		writeback_io->data = writeback_seg->buf + (i << 12);	// 4096 data size: 4K
 	}
 
 	return writeback_seg;
@@ -1244,9 +1245,11 @@ static int init_writeback_daemon(struct wb_device *wb)
 	atomic_set(&wb->writeback_fail_count, 0);
 	atomic_set(&wb->writeback_io_count, 0);
 
-	//nr_batch = 8;
-	//nr_batch = 32;
+#ifdef ACACHE
 	nr_batch = 4096; 
+#else 
+	nr_batch = 32;
+#endif
 	//(jjo) 최대 writeback 처리 가능한 세그먼트 개수. 
 	//나중에 dmsetup message 를 사용하여 변경가능하다.
 	wb->nr_max_batched_writeback = nr_batch;

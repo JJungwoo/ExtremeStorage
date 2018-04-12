@@ -3,9 +3,10 @@
 !_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
-ASSERT	dm-writeboost.h	489;"	d
-CREATE_DAEMON	dm-writeboost-metadata.c	1188;"	d	file:
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ACACHE	dm-writeboost-daemon.c	26;"	d	file:
+ASSERT	dm-writeboost.h	493;"	d
+CREATE_DAEMON	dm-writeboost-metadata.c	1189;"	d	file:
 DM_ENDIO_DONE_COMPAT	dm-writeboost-target.c	1490;"	d	file:
 DM_MSG_PREFIX	dm-writeboost.h	23;"	d
 DM_WRITEBOOST_DAEMON_H	dm-writeboost-daemon.h	21;"	d
@@ -33,12 +34,12 @@ SUB_ID	dm-writeboost.h	48;"	d
 SZ_MAX	dm-writeboost.h	142;"	d
 WB_CREATED	dm-writeboost.h	/^	WB_CREATED = 0,$/;"	e	enum:WB_FLAG
 WB_FLAG	dm-writeboost.h	/^enum WB_FLAG {$/;"	g
-WB_IO_READ	dm-writeboost.h	517;"	d
-WB_IO_READ	dm-writeboost.h	524;"	d
-WB_IO_WRITE	dm-writeboost.h	516;"	d
-WB_IO_WRITE	dm-writeboost.h	523;"	d
-WB_IO_WRITE_FUA	dm-writeboost.h	518;"	d
-WB_IO_WRITE_FUA	dm-writeboost.h	525;"	d
+WB_IO_READ	dm-writeboost.h	521;"	d
+WB_IO_READ	dm-writeboost.h	528;"	d
+WB_IO_WRITE	dm-writeboost.h	520;"	d
+WB_IO_WRITE	dm-writeboost.h	527;"	d
+WB_IO_WRITE_FUA	dm-writeboost.h	522;"	d
+WB_IO_WRITE_FUA	dm-writeboost.h	529;"	d
 WB_MAGIC	dm-writeboost.h	77;"	d
 __acquire_new_rambuffer	dm-writeboost-target.c	/^static void __acquire_new_rambuffer(struct wb_device *wb, u64 id)$/;"	f	file:
 __acquire_new_seg	dm-writeboost-target.c	/^static void __acquire_new_seg(struct wb_device *wb, u64 id)$/;"	f	file:
@@ -50,6 +51,7 @@ __packed	dm-writeboost.h	/^} __packed;$/;"	v	typeref:struct:superblock_record_de
 ack_count	dm-writeboost.h	/^	atomic_t ack_count;$/;"	m	struct:read_cache_cells
 acquire_new_seg	dm-writeboost-target.c	/^void acquire_new_seg(struct wb_device *wb, u64 id)$/;"	f
 adaptive_write_mode	dm-writeboost.h	/^	bool adaptive_write_mode;$/;"	m	struct:wb_device
+adaptive_write_mode_saved	dm-writeboost.h	/^	bool adaptive_write_mode_saved;$/;"	m	struct:wb_device
 add_writeback_io	dm-writeboost-daemon.c	/^static void add_writeback_io(struct wb_device *wb, struct writeback_io *writeback_io)$/;"	f	file:
 advance_cursor	dm-writeboost-target.c	/^static u32 advance_cursor(struct wb_device *wb)$/;"	f	file:
 alloc_read_cache_cells	dm-writeboost-target.c	/^static struct read_cache_cells *alloc_read_cache_cells(struct wb_device *wb, u32 n)$/;"	f	file:
@@ -69,10 +71,10 @@ bi_sector	dm-writeboost-target.c	129;"	d	file:
 bio	dm-writeboost-target.c	/^	struct bio *bio;$/;"	m	struct:read_backing_async_context	typeref:struct:read_backing_async_context::bio	file:
 bio_calc_offset	dm-writeboost-target.c	/^static u8 bio_calc_offset(struct bio *bio)$/;"	f	file:
 bio_io_success_compat	dm-writeboost-target.c	/^void bio_io_success_compat(struct bio *bio)$/;"	f
-bio_is_barrier	dm-writeboost.h	514;"	d
-bio_is_barrier	dm-writeboost.h	521;"	d
-bio_is_fua	dm-writeboost.h	515;"	d
-bio_is_fua	dm-writeboost.h	522;"	d
+bio_is_barrier	dm-writeboost.h	518;"	d
+bio_is_barrier	dm-writeboost.h	525;"	d
+bio_is_fua	dm-writeboost.h	519;"	d
+bio_is_fua	dm-writeboost.h	526;"	d
 bio_is_fullsize	dm-writeboost-target.c	/^static bool bio_is_fullsize(struct bio *bio)$/;"	f	file:
 bio_is_write	dm-writeboost-target.c	/^static bool bio_is_write(struct bio *bio)$/;"	f	file:
 bio_remap	dm-writeboost-target.c	/^static void bio_remap(struct bio *bio, struct dm_dev *dev, sector_t sector)$/;"	f	file:
@@ -100,8 +102,8 @@ calc_offset	dm-writeboost-target.c	/^static u8 calc_offset(sector_t sector)$/;"	
 calc_segment_header_start	dm-writeboost-metadata.c	/^static sector_t calc_segment_header_start(struct wb_device *wb, u32 k)$/;"	f	file:
 cancelled	dm-writeboost.h	/^	bool cancelled; \/* Don't include this *\/$/;"	m	struct:read_cache_cell
 cell_idx	dm-writeboost-target.c	/^		u32 cell_idx;$/;"	m	union:per_bio_data::__anon1	file:
-check_buffer_alignment	dm-writeboost.h	491;"	d
-check_io_pattern	dm-writeboost-daemon.c	/^int check_io_pattern(struct dm_device *wb, struct rambuffer *rambuf, struct segment_header *seg)$/;"	f
+check_buffer_alignment	dm-writeboost.h	495;"	d
+check_io_pattern	dm-writeboost-daemon.c	/^static int check_io_pattern(struct wb_device *wb, struct segment_header *seg)$/;"	f	file:
 checksum	dm-writeboost.h	/^	__le32 checksum;$/;"	m	struct:segment_header_device
 clear_stat	dm-writeboost-target.c	/^static void clear_stat(struct wb_device *wb)$/;"	f	file:
 compare_writeback_io	dm-writeboost-daemon.c	/^static bool compare_writeback_io(struct writeback_io *a, struct writeback_io *b)$/;"	f	file:
@@ -338,12 +340,12 @@ ref_buffered_mb	dm-writeboost-target.c	/^static void *ref_buffered_mb(struct wb_
 regions	dm-writeboost-target.c	/^	struct dm_io_region *regions;$/;"	m	struct:wb_io	typeref:struct:wb_io::dm_io_region	file:
 reinit_read_cache_cells	dm-writeboost-target.c	/^static void reinit_read_cache_cells(struct wb_device *wb)$/;"	f	file:
 replay_log_on_cache	dm-writeboost-metadata.c	/^static int replay_log_on_cache(struct wb_device *wb)$/;"	f	file:
-req_is_write	dm-writeboost.h	513;"	d
-req_is_write	dm-writeboost.h	520;"	d
+req_is_write	dm-writeboost.h	517;"	d
+req_is_write	dm-writeboost.h	524;"	d
 reserve_read_cache_cell	dm-writeboost-target.c	/^static bool reserve_read_cache_cell(struct wb_device *wb, struct bio *bio)$/;"	f	file:
-restore_arg	dm-writeboost-target.c	1754;"	d	file:
+restore_arg	dm-writeboost-target.c	1756;"	d	file:
 resume_cache	dm-writeboost-metadata.c	/^int resume_cache(struct wb_device *wb)$/;"	f
-save_arg	dm-writeboost-target.c	1753;"	d	file:
+save_arg	dm-writeboost-target.c	1755;"	d	file:
 sb_record_updater	dm-writeboost.h	/^	struct task_struct *sb_record_updater;$/;"	m	struct:wb_device	typeref:struct:wb_device::task_struct
 sb_record_updater_proc	dm-writeboost-daemon.c	/^int sb_record_updater_proc(void *data)$/;"	f
 sector	dm-writeboost-metadata.h	/^	sector_t sector;$/;"	m	struct:lookup_key
@@ -360,6 +362,9 @@ segment_header_array	dm-writeboost.h	/^	struct large_array *segment_header_array
 segment_header_device	dm-writeboost.h	/^struct segment_header_device {$/;"	s
 segment_id_to_idx	dm-writeboost-metadata.c	/^static u32 segment_id_to_idx(struct wb_device *wb, u64 id)$/;"	f	file:
 seqcount	dm-writeboost.h	/^	u32 seqcount;$/;"	m	struct:read_cache_cells
+sequential_threshold	dm-writeboost.h	/^	u8 sequential_threshold;$/;"	m	struct:wb_device
+sequential_threshold_saved	dm-writeboost.h	/^	u8 sequential_threshold_saved;$/;"	m	struct:wb_device
+sequential_write	dm-writeboost-daemon.c	/^static void sequential_write(struct wb_device *wb, struct rambuffer *rambuf, struct segment_header *seg)$/;"	f	file:
 should_flush	dm-writeboost-daemon.c	/^static bool should_flush(struct wb_device *wb)$/;"	f	file:
 should_writeback	dm-writeboost-daemon.c	/^static bool should_writeback(struct wb_device *wb)$/;"	f	file:
 size	dm-writeboost.h	/^	u32 size;$/;"	m	struct:read_cache_cells
@@ -392,7 +397,7 @@ wake_up_active_wq	dm-writeboost-target.c	/^static void wake_up_active_wq(wait_qu
 wb	dm-writeboost-target.c	/^	struct wb_device *wb;$/;"	m	struct:read_backing_async_context	typeref:struct:read_backing_async_context::wb_device	file:
 wb_device	dm-writeboost.h	/^struct wb_device {$/;"	s
 wb_io	dm-writeboost-target.c	/^struct wb_io {$/;"	s	file:
-wb_io	dm-writeboost.h	501;"	d
+wb_io	dm-writeboost.h	505;"	d
 wb_io_fn	dm-writeboost-target.c	/^static void wb_io_fn(struct work_struct *work)$/;"	f	file:
 wb_io_internal	dm-writeboost-target.c	/^int wb_io_internal(struct wb_device *wb, struct dm_io_request *io_req,$/;"	f
 work	dm-writeboost-target.c	/^	struct work_struct work;$/;"	m	struct:wb_io	typeref:struct:wb_io::work_struct	file:

@@ -18,7 +18,7 @@ Log-structured Caching for Linux
 - **Build Up**
 	* sudo git clone https://github.com/JJungwoo/extremestorage.git
 	* sudo rpm -ivh http://repository.it4i.cz/mirrors/repoforge/redhat/el6/en/x86_64/rpmforge/RPMS/rpmforge-release-0.5.3-1.el6.rf.x86_64.rpm 
-		* 아래의 방법으로 rpmforge를 설치할 수 없을 경우 코드를 직접 받아서 설치해야함.
+		* 위의 방법으로 rpmforge를 설치할 수 없을 경우 코드를 직접 받아서 설치해야함.
 	* sudo yum check-update 
 	* sudo yum install -y dkms
 	* sudo make install (extreme-cache 가상 상위 디렉터리에서 실행.)
